@@ -58,9 +58,12 @@ class Login extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 64),
                       child: IconButton(
                         onPressed: () {
-                          if(LoginService.tryLogin(emailController.text, passwordController.text)) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
-                          }
+                            var elysiumUser = LoginService.tryLogin(emailController.text, passwordController.text);
+
+                            if (elysiumUser != null) {
+                              
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Home(elysiumUser: elysiumUser,)));
+                            }
                         },
                         icon: Tooltip(
                           margin: const EdgeInsets.only(top: 16),

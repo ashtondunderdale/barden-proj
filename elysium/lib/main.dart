@@ -19,10 +19,10 @@ class Elysium extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: "Elysium",
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: Login(),
     );
   }
 }

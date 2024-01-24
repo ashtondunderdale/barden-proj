@@ -1,8 +1,10 @@
+import 'package:elysium/models/elysium_user.dart';
+
 class LoginService {
 
-  static bool tryLogin(String email, String password) {
+  static ElysiumUser tryLogin(String email, String password) {
 
-
-    return true;
+    ElysiumUser elysiumUser = ElysiumUser();
+    return elysiumUser;
   }
 }
