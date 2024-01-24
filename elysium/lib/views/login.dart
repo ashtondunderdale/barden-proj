@@ -35,6 +35,7 @@ class Login extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: TextField(
+                        cursorColor: Styles.mediumGrey,
                         controller: emailController,
                         decoration: Styles.loginDecoration.copyWith(
                           hintText: "email",
@@ -44,7 +45,9 @@ class Login extends StatelessWidget {
                       ),
                     ),
                     TextField(
+                      cursorColor: Styles.mediumGrey,
                       controller: passwordController,
+                      obscureText: true,
                       decoration: Styles.loginDecoration.copyWith(
                         hintText: "password",
                         hintStyle: Styles.loginHintStyle,
@@ -60,7 +63,7 @@ class Login extends StatelessWidget {
                           }
                         },
                         icon: Tooltip(
-                          margin: EdgeInsets.only(top: 16),
+                          margin: const EdgeInsets.only(top: 16),
                           decoration: Styles.tooltipBoxDecoration,
                           textStyle: Styles.tooltipTextStyle,
                           message: "Login",

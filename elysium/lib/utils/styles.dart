@@ -35,22 +35,30 @@ class Styles {
   );
 
   static TextStyle elysiumTitleStyle = TextStyle(
-    fontSize: 64, 
+    fontSize: 96, 
     color: const Color.fromARGB(255, 149, 149, 149),
     letterSpacing: 4,
     fontFamily: GoogleFonts.libreBaskerville().fontFamily,
     fontStyle: FontStyle.italic,
   );
 
-    static const TextStyle tooltipTextStyle = TextStyle(
+    static TextStyle tooltipTextStyle = font.copyWith(
     color: lightGrey,
     fontSize: 16.0,
-    fontWeight: FontWeight.normal,
+    fontWeight: FontWeight.normal, 
   );
 
   static BoxDecoration tooltipBoxDecoration = BoxDecoration(
     color: Colors.white,
     border: Border.all(color: lightGrey),
     borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
+  );
+
+    static TextStyle titleTextStyle = TextStyle(
+    fontSize: 32, 
+    color: const Color.fromARGB(255, 149, 149, 149),
+    letterSpacing: 1,
+    fontFamily: GoogleFonts.libreBaskerville().fontFamily,
+    fontStyle: FontStyle.italic,
   );
 }

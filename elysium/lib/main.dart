@@ -1,3 +1,4 @@
+import 'package:elysium/views/home.dart';
 import 'package:elysium/views/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,9 +19,10 @@ class Elysium extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
+      title: "Elysium",
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: Home(),
     );
   }
 }
