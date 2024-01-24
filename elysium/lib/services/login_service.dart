@@ -1,6 +1,8 @@
 class LoginService {
 
-  static void tryLogin(String email, String password) {
+  static bool tryLogin(String email, String password) {
 
+
+    return true;
   }
 }
