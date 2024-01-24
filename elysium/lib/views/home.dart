@@ -1,6 +1,7 @@
 import 'package:elysium/models/elysium_user.dart';
 import 'package:elysium/services/note_service.dart';
 import 'package:elysium/utils/styles.dart';
+import 'package:elysium/widgets/note_box.dart';
 import 'package:flutter/material.dart';
 
 import '../models/note.dart';
@@ -21,8 +22,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // Initialize activeNote with an empty note
-    activeNote = NoteService.createNote("", "", widget.elysiumUser);
+    activeNote = NoteService.createNote("Untitled", "", widget.elysiumUser);
   }
 
   @override
@@ -52,6 +52,7 @@ class _HomeState extends State<Home> {
                       IconButton(
                         onPressed: () {
                           activeNote = NoteService.createNote("testnote", "", widget.elysiumUser);
+                          contentController.text = activeNote.content;
                           setState(() {});
                         },
                         icon: const Icon(
@@ -67,21 +68,22 @@ class _HomeState extends State<Home> {
                   child: Column(
                     children: [
                       for (Note note in widget.elysiumUser.notes)
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              activeNote = note;
-                              contentController.text = note.content;
-                            });
-
-
-                            setState(() {
-                              
-                            });
-
-                            print(activeNote.content);
-                          },
-                          child: Text(note.title),
+                        Container(
+                          color: Colors.white,
+                          child: TextButton(
+                            onPressed: () {
+                              setState(() {
+                                activeNote = note;
+                                contentController.text = note.content;
+                              });               
+                            },
+                            child: Text(
+                              note.title,
+                              style: const TextStyle(
+                                color: Styles.mediumGrey
+                              ),
+                            ),
+                          ),
                         ),
                     ],
                   ),
@@ -90,50 +92,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           const Spacer(),
-          Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width / 8 - 64),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width / 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "taking notes...",
-                      style: Styles.titleTextStyle,
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height / 2,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Styles.mediumGrey),
-                      borderRadius: BorderRadius.circular(Styles.borderRadius),
-                      color: Styles.lightGrey,
-                    ),
-                    child: TextField(
-                      controller: contentController,
-                      onChanged: (isChanged) {
-                        NoteService.updateNote(contentController.text, activeNote);
-
-                        print(activeNote.content);
-                        print(activeNote.title);
-
-                        setState(() {});
-                      },
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(16.0),
-                        hintText: "Write here.",
-                      ),
-                      style: const TextStyle(color: Styles.mediumGrey),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          NoteBox(activeNote: activeNote, contentController: contentController),
           const Spacer(),
         ],
       ),
