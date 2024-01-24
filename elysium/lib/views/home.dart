@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../models/note.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key, required this.elysiumUser});
+  const Home({Key? key, required this.elysiumUser}) : super(key: key);
 
   final ElysiumUser elysiumUser;
 
@@ -16,7 +16,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final TextEditingController contentController = TextEditingController();
-  late final Note activeNote;
+  late Note activeNote;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize activeNote with an empty note
+    activeNote = NoteService.createNote("", "", widget.elysiumUser);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +33,7 @@ class _HomeState extends State<Home> {
         children: [
           Container(
             width: 256,
-            height: MediaQuery.sizeOf(context).height,
+            height: MediaQuery.of(context).size.height,
             color: Styles.lightGrey,
             child: Column(
               children: [
@@ -34,9 +41,7 @@ class _HomeState extends State<Home> {
                   child: Row(
                     children: [
                       IconButton(
-                        onPressed: () {
-
-                        },
+                        onPressed: () {},
                         icon: const Icon(
                           Icons.arrow_back,
                           color: Styles.mediumGrey,
@@ -46,7 +51,8 @@ class _HomeState extends State<Home> {
                       const Spacer(),
                       IconButton(
                         onPressed: () {
-
+                          activeNote = NoteService.createNote("testnote", "", widget.elysiumUser);
+                          setState(() {});
                         },
                         icon: const Icon(
                           Icons.book,
@@ -57,15 +63,37 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                Text("${widget.elysiumUser.notes.length}")
+                SizedBox(
+                  child: Column(
+                    children: [
+                      for (Note note in widget.elysiumUser.notes)
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              activeNote = note;
+                              contentController.text = note.content;
+                            });
+
+
+                            setState(() {
+                              
+                            });
+
+                            print(activeNote.content);
+                          },
+                          child: Text(note.title),
+                        ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
           const Spacer(),
           Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).width / 8 - 64),
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width / 8 - 64),
             child: SizedBox(
-              width: MediaQuery.sizeOf(context).width / 2,
+              width: MediaQuery.of(context).size.width / 2,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -77,7 +105,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   Container(
-                    height: MediaQuery.sizeOf(context).height / 2,
+                    height: MediaQuery.of(context).size.height / 2,
                     decoration: BoxDecoration(
                       border: Border.all(color: Styles.mediumGrey),
                       borderRadius: BorderRadius.circular(Styles.borderRadius),
@@ -86,17 +114,12 @@ class _HomeState extends State<Home> {
                     child: TextField(
                       controller: contentController,
                       onChanged: (isChanged) {
-                        if (widget.elysiumUser.notes.isEmpty) {
-                          Note note = NoteService.createNote("Untitled Note", contentController.text, widget.elysiumUser);
-                          activeNote = note;
-                        }
+                        NoteService.updateNote(contentController.text, activeNote);
 
-                          NoteService.updateNote(contentController.text, activeNote);
+                        print(activeNote.content);
+                        print(activeNote.title);
 
-                          print(activeNote.content);
-                          print(activeNote.title);
-
-                          setState(() {});
+                        setState(() {});
                       },
                       maxLines: null,
                       decoration: const InputDecoration(
@@ -104,7 +127,7 @@ class _HomeState extends State<Home> {
                         contentPadding: EdgeInsets.all(16.0),
                         hintText: "Write here.",
                       ),
-                      style: const TextStyle(color: Styles.mediumGrey), 
+                      style: const TextStyle(color: Styles.mediumGrey),
                     ),
                   ),
                 ],
@@ -113,7 +136,7 @@ class _HomeState extends State<Home> {
           ),
           const Spacer(),
         ],
-      )
+      ),
     );
   }
 }
