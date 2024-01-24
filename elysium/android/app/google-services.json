@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1040221399084",
+    "project_id": "elysium-xr7aa",
+    "storage_bucket": "elysium-xr7aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040221399084:android:0046bc96be863ff3a28989",
+        "android_client_info": {
+          "package_name": "com.example.elysium"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpwCrZ6fvO-W5qrp_m0RS2dYCifv4Ax5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
