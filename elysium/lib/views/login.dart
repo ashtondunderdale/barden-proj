@@ -1,4 +1,4 @@
-import 'package:elysium/views/home.dart';
+import 'package:elysium/views/notes.dart';
 import 'package:flutter/material.dart';
 
 import '../services/login_service.dart';
@@ -62,7 +62,7 @@ class Login extends StatelessWidget {
 
                             if (elysiumUser != null) {
                               
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Home(elysiumUser: elysiumUser,)));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Notes(elysiumUser: elysiumUser,)));
                             }
                         },
                         icon: Tooltip(

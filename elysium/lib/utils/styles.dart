@@ -8,6 +8,7 @@ class Styles {
   static const Color lightGrey = Color.fromARGB(255, 230, 230, 230);
   static const Color lightMediumGrey = Color.fromARGB(255, 199, 199, 199);
   static const Color mediumGrey = Color.fromARGB(255, 158, 158, 158);
+  static const Color darkGrey = Color.fromARGB(255, 90, 90, 90);
 
   static const double borderRadius = 8;
 

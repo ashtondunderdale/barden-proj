@@ -1,4 +1,4 @@
-import 'package:elysium/views/home.dart';
+import 'package:elysium/views/notes.dart';
 import 'package:elysium/views/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';

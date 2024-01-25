@@ -5,24 +5,25 @@ import 'package:flutter/material.dart';
 
 import '../models/note.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key, required this.elysiumUser}) : super(key: key);
+class Notes extends StatefulWidget {
+  const Notes({Key? key, required this.elysiumUser}) : super(key: key);
 
   final ElysiumUser elysiumUser;
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Notes> createState() => _NotesState();
 }
 
-class _HomeState extends State<Home> {
+class _NotesState extends State<Notes> {
   final TextEditingController contentController = TextEditingController();
+    final TextEditingController titleController = TextEditingController();
   late Note activeNote;
   Color noteItemColour = Styles.lightGrey;
 
   @override
   void initState() {
     super.initState();
-    activeNote = NoteService.createNote("Untitled", "Untitled", widget.elysiumUser);
+    activeNote = NoteService.createNote("Untitled", "", widget.elysiumUser);
     setActiveNote(activeNote);
   }
 
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> {
                         onPressed: () {
                             String noteTitle = NoteService.generateNoteTitle(widget.elysiumUser.notes);
                             setState(() {
-                              activeNote = NoteService.createNote(noteTitle, noteTitle, widget.elysiumUser);
+                              activeNote = NoteService.createNote(noteTitle, "", widget.elysiumUser);
                               setActiveNote(activeNote);
                             });
                         },
@@ -76,7 +77,7 @@ class _HomeState extends State<Home> {
                           MouseRegion(
                             onEnter: (isEnter) {
                               setState(() {
-                                noteItemColour = Colors.red;    
+                                noteItemColour = Styles.lightMediumGrey;    
                               });
                             },
                             onExit: (isExit) {
@@ -89,13 +90,14 @@ class _HomeState extends State<Home> {
                                 setState(() {
                                   activeNote = note;
                                   contentController.text = note.content;
+                                  titleController.text = note.title;
                                 });
                               },
                               child: Container(
                                 height: 32,
                                 width: 180,
                                 decoration: BoxDecoration(
-                                  color: Styles.lightGrey,
+                                  color: noteItemColour,
                                   borderRadius: BorderRadius.circular(Styles.borderRadius),
                                   border: Border.all(color: Styles.lightGrey),
                                 ),
@@ -104,7 +106,7 @@ class _HomeState extends State<Home> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 8),
                                     child: Text(
-                                      note.title,
+                                      note.title.length > 20 ? note.title.substring(0,20) + "..." : note.title,
                                       style: TextStyle(
                                         color: Styles.mediumGrey,
                                         fontWeight: activeNote == note ? FontWeight.bold : FontWeight.normal,
@@ -144,20 +146,42 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(Styles.borderRadius),
                       color: Styles.lightGrey,
                     ),
-                    child: TextField(
-                      controller: contentController,
-                      onChanged: (isChanged) {
-                        NoteService.updateNote(contentController.text, activeNote);
-                        activeNote.title = activeNote.content.split('\n')[0];
-                        setState(() {});
-                      },
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(16.0),
-                        hintText: "Write here.",
-                      ),
-                      style: const TextStyle(color: Styles.mediumGrey),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: titleController,
+                          onChanged: (isChanged) {
+                            NoteService.updateNote(titleController.text, activeNote);
+                            activeNote.title = activeNote.content.split('\n')[0];                        
+                            setState(() {});
+                          },
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.all(16.0),
+                            hintText: "Write here.",
+                          ),
+                          style: const TextStyle(
+                            color: Styles.darkGrey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        TextField(
+                          controller: contentController,
+                          onChanged: (isChanged) {
+                            NoteService.updateNote(contentController.text, activeNote);
+                            setState(() {});
+                          },
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.all(16.0),
+                            hintText: "Write here.",
+                          ),
+                          style: const TextStyle(color: Styles.mediumGrey),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -171,7 +195,8 @@ class _HomeState extends State<Home> {
   }
 
   void setActiveNote(Note note) {
-  activeNote = note;
-  contentController.text = note.content;
-}
+    activeNote = note;
+    titleController.text = note.title;
+    contentController.text = note.content;
+  }
 }
