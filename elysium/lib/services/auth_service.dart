@@ -1,5 +1,8 @@
-import 'package:elysium/models/elysium_user.dart';
+import 'package:elysium/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../models/elysium_user.dart';
+
 
 class AuthService {
 
@@ -13,7 +16,7 @@ class AuthService {
                                       );
 
       User? firebaseUser = result.user;
-      var elysiumUser = createElysiumUser(firebaseUser);
+      var elysiumUser = createElysiumUser(firebaseUser, "");
 
       return elysiumUser;
 
@@ -23,7 +26,7 @@ class AuthService {
     }
   }
 
-  static Future<ElysiumUser?> tryRegister(String email, String password) async {
+  static Future<ElysiumUser?> tryRegister(String email, String password, String username) async {
       try {
         UserCredential result = await _auth.createUserWithEmailAndPassword(
                                   email: email, 
@@ -31,8 +34,10 @@ class AuthService {
                                 );
         
         User? firebaseUser = result.user;
-        var elysiumUser = createElysiumUser(firebaseUser);
+        var elysiumUser = createElysiumUser(firebaseUser, username);
         
+        await DatabaseService(userID: firebaseUser!.uid).updateUserData(firebaseUser.uid, username);
+
         return elysiumUser;
 
       } catch (exception) {
@@ -41,10 +46,10 @@ class AuthService {
       }
   }
 
-  static ElysiumUser? createElysiumUser(User? user) {
+  static ElysiumUser? createElysiumUser(User? user, String username) {
 
     if (user != null) {
-      return ElysiumUser(userID: user.uid);
+      return ElysiumUser(userID: user.uid, username: username);
     }
     else {
       return null;

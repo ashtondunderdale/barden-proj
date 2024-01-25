@@ -11,6 +11,8 @@ class Register extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? _validateEmail(String? value) {
@@ -48,82 +50,93 @@ class Register extends StatelessWidget {
               ),
             ),
             Center(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 64),
-                child: SizedBox(
-                  width: 300,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Text(
-                          "Register",
-                          style: Styles.loginHintStyle,
-                        ),
+              child: SizedBox(
+                width: 300,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        "Register",
+                        style: Styles.loginHintStyle,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: TextFormField(
-                          cursorColor: Styles.mediumGrey,
-                          controller: emailController,
-                          validator: _validateEmail,
-                          decoration: Styles.loginDecoration.copyWith(
-                            hintText: "email",
-                            hintStyle: Styles.loginHintStyle,
-                          ),
-                          style: Styles.loginHintStyle,
-                        ),
-                      ),
-                      TextFormField(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: TextFormField(
                         cursorColor: Styles.mediumGrey,
-                        controller: passwordController,
-                        obscureText: true,
-                        validator: _validatePassword,
+                        controller: emailController,
+                        validator: _validateEmail,
                         decoration: Styles.loginDecoration.copyWith(
-                          hintText: "password",
+                          hintText: "email",
                           hintStyle: Styles.loginHintStyle,
                         ),
                         style: Styles.loginHintStyle,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 64),
-                        child: IconButton(
-                          onPressed: () async {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              ElysiumUser? elysiumUser = await AuthService.tryRegister(emailController.text, passwordController.text);
-
-                              if (elysiumUser != null) {
-                                Navigator.push(context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Notes(
-                                      elysiumUser: elysiumUser
-                                    )
-                                  ),
-                                );
-                              }
+                    ),
+                    TextFormField(
+                      cursorColor: Styles.mediumGrey,
+                      controller: passwordController,
+                      obscureText: true,
+                      validator: _validatePassword,
+                      decoration: Styles.loginDecoration.copyWith(
+                        hintText: "password",
+                        hintStyle: Styles.loginHintStyle,
+                      ),
+                      style: Styles.loginHintStyle,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 32),
+                      child: TextFormField(
+                        cursorColor: Styles.mediumGrey,
+                        controller: usernameController,
+                        decoration: Styles.loginDecoration.copyWith(
+                          hintText: "username",
+                          hintStyle: Styles.loginHintStyle,
+                        ),
+                        style: Styles.loginHintStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 64),
+                      child: IconButton(
+                        onPressed: () async {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            ElysiumUser? elysiumUser = await AuthService.tryRegister(
+                                                              emailController.text, 
+                                                              passwordController.text,
+                                                              usernameController.text
+                                                            );
+              
+                            if (elysiumUser != null) {
+                              Navigator.push(context,
+                                MaterialPageRoute(
+                                  builder: (context) => Login(),
+                                ),
+                              );
                             }
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward,
-                            color: Styles.lightGrey,
-                            size: 40,
-                          ),
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: Styles.lightGrey,
+                          size: 40,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 128),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
-                          },
-                          child: Text(
-                            "Or Login here",
-                            style: Styles.loginHintStyle,
-                          ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 128),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+                        },
+                        child: Text(
+                          "Or Login here",
+                          style: Styles.loginHintStyle,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
