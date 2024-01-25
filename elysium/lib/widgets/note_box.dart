@@ -5,10 +5,10 @@ import '../services/note_service.dart';
 import '../utils/styles.dart';
 
 class NoteBox extends StatefulWidget {
-  const NoteBox({super.key, required this.activeNote, required this.contentController});
+  const NoteBox({super.key, required this.contentController, required this.activeNote});
   
-  final Note activeNote;
   final TextEditingController contentController;
+  final Note activeNote;
 
   @override
   State<NoteBox> createState() => _NoteBoxState();

@@ -1,8 +1,6 @@
 import 'package:elysium/models/elysium_user.dart';
 import 'package:elysium/services/note_service.dart';
 import 'package:elysium/utils/styles.dart';
-import 'package:elysium/widgets/note_box.dart';
-import 'package:elysium/widgets/note_list.dart';
 import 'package:flutter/material.dart';
 
 import '../models/note.dart';
@@ -52,9 +50,9 @@ class _HomeState extends State<Home> {
                       const Spacer(),
                       IconButton(
                         onPressed: () {
-                          activeNote = NoteService.createNote("testnote", "", widget.elysiumUser);
-                          contentController.text = activeNote.content;
-                          setState(() {});
+                            String noteTitle = NoteService.generateNoteName(widget.elysiumUser.notes);
+                            activeNote = NoteService.createNote(noteTitle, "", widget.elysiumUser);
+                            setState(() {});
                         },
                         icon: const Icon(
                           Icons.book,
@@ -65,12 +63,91 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                NoteList(elysiumUser: widget.elysiumUser, contentController: contentController, activeNote: activeNote),
+                SizedBox(
+                  child: Column(
+                    children: [
+                      for (Note note in widget.elysiumUser.notes)
+                        GestureDetector(
+                          onTap: () {                            
+                            setState(() {
+                              activeNote = note;
+                              contentController.text = note.content;
+                            });
+                          },
+                          child: Container(
+                            height: 32,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: Styles.lightGrey,
+                              borderRadius: BorderRadius.circular(Styles.borderRadius),
+                              border: Border.all(color: Styles.lightGrey),
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Text(
+                                  note.title,
+                                  style: TextStyle(
+                                    color: Styles.mediumGrey,
+                                    fontWeight: activeNote == note ? FontWeight.bold : FontWeight.normal,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
           const Spacer(),
-          NoteBox(activeNote: activeNote, contentController: contentController),
+          Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width / 8 - 64),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width / 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "taking notes...",
+                      style: Styles.titleTextStyle,
+                    ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Styles.mediumGrey),
+                      borderRadius: BorderRadius.circular(Styles.borderRadius),
+                      color: Styles.lightGrey,
+                    ),
+                    child: TextField(
+                      controller: contentController,
+                      onChanged: (isChanged) {
+                        NoteService.updateNote(contentController.text, activeNote);
+
+                        print(activeNote.content);
+                        print(activeNote.title);
+
+                        setState(() {});
+                      },
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(16.0),
+                        hintText: "Write here.",
+                      ),
+                      style: const TextStyle(color: Styles.mediumGrey),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           const Spacer(),
         ],
       ),
