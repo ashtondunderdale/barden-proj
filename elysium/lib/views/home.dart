@@ -2,6 +2,7 @@ import 'package:elysium/models/elysium_user.dart';
 import 'package:elysium/services/note_service.dart';
 import 'package:elysium/utils/styles.dart';
 import 'package:elysium/widgets/note_box.dart';
+import 'package:elysium/widgets/note_list.dart';
 import 'package:flutter/material.dart';
 
 import '../models/note.dart';
@@ -64,30 +65,7 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  child: Column(
-                    children: [
-                      for (Note note in widget.elysiumUser.notes)
-                        Container(
-                          color: Colors.white,
-                          child: TextButton(
-                            onPressed: () {
-                              setState(() {
-                                activeNote = note;
-                                contentController.text = note.content;
-                              });               
-                            },
-                            child: Text(
-                              note.title,
-                              style: const TextStyle(
-                                color: Styles.mediumGrey
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                )
+                NoteList(elysiumUser: widget.elysiumUser, contentController: contentController, activeNote: activeNote),
               ],
             ),
           ),
