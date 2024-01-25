@@ -5,16 +5,20 @@ import '../models/note.dart';
 class NoteService {
 
   static Note createNote(String title, String content, ElysiumUser elysiumUser) {
-
     Note note = Note(title: title, content: content);
     elysiumUser.notes.add(note);
     return note;
   }
 
-  static void updateNote(String content, Note note) {
-    note.content = content;
+
+  static void updateNoteTitle(String title, Note note) {
+    note.title = title;
   }
 
+  
+  static void updateNoteContent(String content, Note note) {
+    note.content = content;
+  }
 
   static String generateNoteTitle(List<Note> userNotes) {
     String baseTitle = "Untitled";  

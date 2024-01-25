@@ -44,18 +44,6 @@ class Styles {
     fontStyle: FontStyle.italic,
   );
 
-    static TextStyle tooltipTextStyle = font.copyWith(
-    color: lightGrey,
-    fontSize: 16.0,
-    fontWeight: FontWeight.normal, 
-  );
-
-  static BoxDecoration tooltipBoxDecoration = BoxDecoration(
-    color: Colors.white,
-    border: Border.all(color: lightGrey),
-    borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
-  );
-
     static TextStyle titleTextStyle = TextStyle(
     fontSize: 32, 
     color: const Color.fromARGB(255, 149, 149, 149),

@@ -1,13 +1,13 @@
-import 'package:elysium/views/notes.dart';
-import 'package:elysium/views/register.dart';
 import 'package:flutter/material.dart';
 
 import '../services/login_service.dart';
 import '../utils/styles.dart';
+import 'login.dart';
+import 'notes.dart';
 
 
-class Login extends StatelessWidget {
-  Login({super.key});
+class Register extends StatelessWidget {
+  Register({super.key});
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -36,7 +36,7 @@ class Login extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
-                        "Login",
+                        "Register",
                         style: Styles.loginHintStyle,
                       ),
                     ),
@@ -67,7 +67,7 @@ class Login extends StatelessWidget {
                       child: IconButton(
                         onPressed: () {
                             var elysiumUser = LoginService.tryLogin(emailController.text, passwordController.text);
-                              
+ 
                             Navigator.push(context, MaterialPageRoute(builder: (context) => Notes(elysiumUser: elysiumUser,)));
                         },
                         icon: const Icon(
@@ -81,10 +81,10 @@ class Login extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 128),
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
                         },
                         child: Text(
-                          "Or Register here",
+                          "Or Login here",
                           style: Styles.loginHintStyle,
                         ),
                       ),

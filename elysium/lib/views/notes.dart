@@ -4,6 +4,7 @@ import 'package:elysium/utils/styles.dart';
 import 'package:flutter/material.dart';
 
 import '../models/note.dart';
+import '../widgets/note_item.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key, required this.elysiumUser}) : super(key: key);
@@ -70,55 +71,20 @@ class _NotesState extends State<Notes> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
-                  child: SizedBox(
-                    child: Column(
-                      children: [
-                        for (Note note in widget.elysiumUser.notes)
-                          MouseRegion(
-                            onEnter: (isEnter) {
-                              setState(() {
-                                noteItemColour = Styles.lightMediumGrey;    
-                              });
-                            },
-                            onExit: (isExit) {
-                              setState(() {
-                                noteItemColour = Styles.lightGrey;    
-                              });                          
-                            },
-                            child: GestureDetector(
-                              onTap: () {                            
-                                setState(() {
-                                  activeNote = note;
-                                  contentController.text = note.content;
-                                  titleController.text = note.title;
-                                });
-                              },
-                              child: Container(
-                                height: 32,
-                                width: 180,
-                                decoration: BoxDecoration(
-                                  color: noteItemColour,
-                                  borderRadius: BorderRadius.circular(Styles.borderRadius),
-                                  border: Border.all(color: Styles.lightGrey),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    child: Text(
-                                      note.title.length > 20 ? note.title.substring(0,20) + "..." : note.title,
-                                      style: TextStyle(
-                                        color: Styles.mediumGrey,
-                                        fontWeight: activeNote == note ? FontWeight.bold : FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      NoteItem(
+                        notes: widget.elysiumUser.notes,
+                        activeNote: activeNote,
+                        onTap: (Note note) {
+                          setState(() {
+                            activeNote = note;
+                            contentController.text = note.content;
+                            titleController.text = note.title;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 )
               ],
@@ -151,8 +117,8 @@ class _NotesState extends State<Notes> {
                         TextField(
                           controller: titleController,
                           onChanged: (isChanged) {
-                            NoteService.updateNote(titleController.text, activeNote);
-                            activeNote.title = activeNote.content.split('\n')[0];                        
+                            NoteService.updateNoteTitle(titleController.text, activeNote);
+                            activeNote.title = titleController.text;                
                             setState(() {});
                           },
                           maxLines: null,
@@ -167,19 +133,21 @@ class _NotesState extends State<Notes> {
                             fontSize: 20,
                           ),
                         ),
-                        TextField(
-                          controller: contentController,
-                          onChanged: (isChanged) {
-                            NoteService.updateNote(contentController.text, activeNote);
-                            setState(() {});
-                          },
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(16.0),
-                            hintText: "Write here.",
+                        Expanded(
+                          child: TextField(
+                            controller: contentController,
+                            onChanged: (isChanged) {
+                              NoteService.updateNoteContent(contentController.text, activeNote);
+                              setState(() {});
+                            },
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(16.0),
+                              hintText: "Write here.",
+                            ),
+                            style: const TextStyle(color: Styles.mediumGrey),
                           ),
-                          style: const TextStyle(color: Styles.mediumGrey),
                         ),
                       ],
                     ),
