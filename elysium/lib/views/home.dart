@@ -22,7 +22,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    activeNote = NoteService.createNote("Untitled", "", widget.elysiumUser);
+    activeNote = NoteService.createNote("Untitled", "Untitled", widget.elysiumUser);
+    setActiveNote(activeNote);
   }
 
   @override
@@ -51,9 +52,11 @@ class _HomeState extends State<Home> {
                       const Spacer(),
                       IconButton(
                         onPressed: () {
-                            String noteTitle = NoteService.generateNoteName(widget.elysiumUser.notes);
-                            activeNote = NoteService.createNote(noteTitle, "", widget.elysiumUser);
-                            setState(() {});
+                            String noteTitle = NoteService.generateNoteTitle(widget.elysiumUser.notes);
+                            setState(() {
+                              activeNote = NoteService.createNote(noteTitle, noteTitle, widget.elysiumUser);
+                              setActiveNote(activeNote);
+                            });
                         },
                         icon: const Icon(
                           Icons.book,
@@ -146,7 +149,6 @@ class _HomeState extends State<Home> {
                       onChanged: (isChanged) {
                         NoteService.updateNote(contentController.text, activeNote);
                         activeNote.title = activeNote.content.split('\n')[0];
-                        print(activeNote.title);
                         setState(() {});
                       },
                       maxLines: null,
@@ -167,4 +169,9 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  void setActiveNote(Note note) {
+  activeNote = note;
+  contentController.text = note.content;
+}
 }

@@ -15,20 +15,21 @@ class NoteService {
     note.content = content;
   }
 
-static String generateNoteName(List<Note> userNotes) {
-  String baseTitle = "Untitled";  
-  String newNoteTitle = baseTitle;
-  int loopIndex = 0;
 
-  String generateNewTitle() {
-    return loopIndex == 0 ? baseTitle : "$baseTitle $loopIndex";
-  }
+  static String generateNoteTitle(List<Note> userNotes) {
+    String baseTitle = "Untitled";  
+    String newNoteTitle = baseTitle;
+    int loopIndex = 0;
 
-  while (userNotes.any((note) => note.title == newNoteTitle)) {
-    loopIndex++;
-    newNoteTitle = generateNewTitle();
-  }
+    String generateNewTitle() {
+      return loopIndex == 0 ? baseTitle : "$baseTitle $loopIndex";
+    }
 
-  return newNoteTitle;
+    while (userNotes.any((note) => note.title == newNoteTitle)) {
+      loopIndex++;
+      newNoteTitle = generateNewTitle();
+    }
+
+    return newNoteTitle;
   }
 }
