@@ -47,7 +47,7 @@ class Login extends StatelessWidget {
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 128),
+                padding: const EdgeInsets.only(bottom: 64),
                 child: SizedBox(
                   width: 300,
                   child: Column(
@@ -89,9 +89,9 @@ class Login extends StatelessWidget {
                           onPressed: () async {
                             if (_formKey.currentState?.validate() ?? false) {
 
-                              if (await AuthService.tryLogin(emailController.text, passwordController.text)) {
-                                ElysiumUser elysiumUser = ElysiumUser();
-                                
+                              ElysiumUser? elysiumUser = await AuthService.tryLogin(emailController.text, passwordController.text);
+
+                              if (elysiumUser != null) {
                                 Navigator.push(context,
                                   MaterialPageRoute(
                                     builder: (context) => Notes(

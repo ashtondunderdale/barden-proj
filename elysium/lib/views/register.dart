@@ -49,7 +49,7 @@ class Register extends StatelessWidget {
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 128),
+                padding: const EdgeInsets.only(bottom: 64),
                 child: SizedBox(
                   width: 300,
                   child: Column(
@@ -90,17 +90,16 @@ class Register extends StatelessWidget {
                         child: IconButton(
                           onPressed: () async {
                             if (_formKey.currentState?.validate() ?? false) {
-                              if (await AuthService.tryRegister(emailController.text, passwordController.text)) {
-                                ElysiumUser elysiumUser = ElysiumUser();
+                              ElysiumUser? elysiumUser = await AuthService.tryRegister(emailController.text, passwordController.text);
 
-                                Navigator.push(
-                                    context, MaterialPageRoute(
-                                      builder: (context) => Notes(
-                                        elysiumUser: elysiumUser
-                                      )
+                              if (elysiumUser != null) {
+                                Navigator.push(context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Notes(
+                                      elysiumUser: elysiumUser
                                     )
-                                  );
-
+                                  ),
+                                );
                               }
                             }
                           },
