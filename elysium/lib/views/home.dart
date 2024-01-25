@@ -17,6 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final TextEditingController contentController = TextEditingController();
   late Note activeNote;
+  Color noteItemColour = Styles.lightGrey;
 
   @override
   void initState() {
@@ -63,41 +64,56 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  child: Column(
-                    children: [
-                      for (Note note in widget.elysiumUser.notes)
-                        GestureDetector(
-                          onTap: () {                            
-                            setState(() {
-                              activeNote = note;
-                              contentController.text = note.content;
-                            });
-                          },
-                          child: Container(
-                            height: 32,
-                            width: 180,
-                            decoration: BoxDecoration(
-                              color: Styles.lightGrey,
-                              borderRadius: BorderRadius.circular(Styles.borderRadius),
-                              border: Border.all(color: Styles.lightGrey),
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: Text(
-                                  note.title,
-                                  style: TextStyle(
-                                    color: Styles.mediumGrey,
-                                    fontWeight: activeNote == note ? FontWeight.bold : FontWeight.normal,
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: SizedBox(
+                    child: Column(
+                      children: [
+                        for (Note note in widget.elysiumUser.notes)
+                          MouseRegion(
+                            onEnter: (isEnter) {
+                              setState(() {
+                                noteItemColour = Colors.red;    
+                              });
+                            },
+                            onExit: (isExit) {
+                              setState(() {
+                                noteItemColour = Styles.lightGrey;    
+                              });                          
+                            },
+                            child: GestureDetector(
+                              onTap: () {                            
+                                setState(() {
+                                  activeNote = note;
+                                  contentController.text = note.content;
+                                });
+                              },
+                              child: Container(
+                                height: 32,
+                                width: 180,
+                                decoration: BoxDecoration(
+                                  color: Styles.lightGrey,
+                                  borderRadius: BorderRadius.circular(Styles.borderRadius),
+                                  border: Border.all(color: Styles.lightGrey),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Text(
+                                      note.title,
+                                      style: TextStyle(
+                                        color: Styles.mediumGrey,
+                                        fontWeight: activeNote == note ? FontWeight.bold : FontWeight.normal,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
               ],
