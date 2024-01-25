@@ -130,7 +130,7 @@ class _HomeState extends State<Home> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "taking notes...",
+                      "take note...",
                       style: Styles.titleTextStyle,
                     ),
                   ),
@@ -145,10 +145,8 @@ class _HomeState extends State<Home> {
                       controller: contentController,
                       onChanged: (isChanged) {
                         NoteService.updateNote(contentController.text, activeNote);
-
-                        print(activeNote.content);
+                        activeNote.title = activeNote.content.split('\n')[0];
                         print(activeNote.title);
-
                         setState(() {});
                       },
                       maxLines: null,
