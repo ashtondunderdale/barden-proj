@@ -88,7 +88,7 @@ class Login extends StatelessWidget {
                         child: IconButton(
                           onPressed: () async {
                             if (_formKey.currentState?.validate() ?? false) {
-
+                              
                               ElysiumUser? elysiumUser = await AuthService.tryLogin(emailController.text, passwordController.text);
 
                               if (elysiumUser != null) {

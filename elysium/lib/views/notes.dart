@@ -17,14 +17,14 @@ class Notes extends StatefulWidget {
 
 class _NotesState extends State<Notes> {
   final TextEditingController contentController = TextEditingController();
-    final TextEditingController titleController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
   late Note activeNote;
   Color noteItemColour = Styles.lightGrey;
 
   @override
   void initState() {
     super.initState();
-    activeNote = NoteService.createNote("Untitled", "", widget.elysiumUser);
+    activeNote = widget.elysiumUser.notes[0]; // this might need changing
     setActiveNote(activeNote);
   }
 

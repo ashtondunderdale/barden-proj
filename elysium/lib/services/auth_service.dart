@@ -2,11 +2,14 @@ import 'package:elysium/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/elysium_user.dart';
+import '../models/note.dart';
+import 'note_service.dart';
 
 
 class AuthService {
 
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   static Future<ElysiumUser?> tryLogin(String email, String password) async {
       try {
@@ -16,7 +19,13 @@ class AuthService {
                                       );
 
       User? firebaseUser = result.user;
+
+      //var userData = await DatabaseService(userID: firebaseUser!.uid).getUserData();
       var elysiumUser = createElysiumUser(firebaseUser, "");
+
+      if (elysiumUser != null) {
+        await DatabaseService(userID: firebaseUser!.uid).updateUserData(elysiumUser);
+      }
 
       return elysiumUser;
 
@@ -35,13 +44,15 @@ class AuthService {
         
         User? firebaseUser = result.user;
         var elysiumUser = createElysiumUser(firebaseUser, username);
-        
-        await DatabaseService(userID: firebaseUser!.uid).updateUserData(firebaseUser.uid, username);
+
+        if (elysiumUser != null) {
+          await DatabaseService(userID: firebaseUser!.uid).updateUserData(elysiumUser);
+        }
 
         return elysiumUser;
 
       } catch (exception) {
-        print(exception);
+        print("Register Exception: $exception");
         return null;
       }
   }
@@ -49,7 +60,14 @@ class AuthService {
   static ElysiumUser? createElysiumUser(User? user, String username) {
 
     if (user != null) {
-      return ElysiumUser(userID: user.uid, username: username);
+
+      ElysiumUser elysiumUser = ElysiumUser(userID: user.uid, username: username);
+
+      if (elysiumUser.notes.isEmpty) {
+        NoteService.createNote("Untitled", "", elysiumUser);
+      }
+
+      return elysiumUser;
     }
     else {
       return null;

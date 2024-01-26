@@ -103,12 +103,13 @@ class Register extends StatelessWidget {
                         onPressed: () async {
                           if (_formKey.currentState?.validate() ?? false) {
                             ElysiumUser? elysiumUser = await AuthService.tryRegister(
-                                                              emailController.text, 
-                                                              passwordController.text,
-                                                              usernameController.text
-                                                            );
+                              emailController.text, 
+                              passwordController.text,
+                              usernameController.text
+                            );
               
                             if (elysiumUser != null) {
+                              // ignore: use_build_context_synchronously
                               Navigator.push(context,
                                 MaterialPageRoute(
                                   builder: (context) => Login(),
