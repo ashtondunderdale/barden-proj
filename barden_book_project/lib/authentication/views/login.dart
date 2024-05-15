@@ -22,6 +22,7 @@ class _LoginState extends State<Login> {
   final passwordController = TextEditingController();
 
   String authMessage = "";
+  bool isWaitingForLoginResponse = false;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -122,6 +123,7 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
           ),
         ),
         BardenButton(
+          isLoading: isWaitingForLoginResponse,
           text: "LOGIN", 
           onPressed: () {
             _tryLogin();
@@ -132,13 +134,23 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
     ),
   );
 
-  void _tryLogin() {
+  void _tryLogin() async {
+    setState(() {
+      isWaitingForLoginResponse = true;
+    });
+
+    await Future.delayed(Duration(seconds: 1));
+
     var auth = AuthModel(
       username: usernameController.text, 
       password: passwordController.text
     );
                 
     var authSuccess = _auth.loginWithUsernameAndPassword(auth);
+
+    setState(() {
+      isWaitingForLoginResponse = false;
+    });
 
     if (!authSuccess) {
       setState(() {
