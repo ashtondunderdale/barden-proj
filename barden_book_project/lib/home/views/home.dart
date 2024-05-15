@@ -1,4 +1,8 @@
 import 'package:barden_book_project/home/widgets/action_bar.dart';
+import 'package:barden_book_project/home/widgets/books.dart';
+import 'package:barden_book_project/home/widgets/dashboard.dart';
+import 'package:barden_book_project/home/widgets/manage.dart';
+import 'package:barden_book_project/home/widgets/settings.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -9,24 +13,49 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String activeAction = "Dashboard";
+  Widget activeActionBarWidget = const BardenDashboard();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: BardenActionBar(
-        onDashboardTap: () {
-
-        },
-        onManageTap: () {
-
-        },
-        onBookTap: () {
-
-        },
-        onSettingsTap: () {
+      backgroundColor: const Color.fromARGB(255, 238, 238, 238),
+      body: Row(
+        children: [
+          BardenActionBar(
+            activeAction: activeAction,
+            onDashboardTap: () {
+              setState(() {
+                activeAction = "Dashboard";
+                activeActionBarWidget = const BardenDashboard();
+              });
           
-        },
-      )
+            },
+            onManageTap: () {
+              setState(() {
+                activeAction = "Manage";
+                activeActionBarWidget = const BardenManage();
+              });
+          
+            },
+            onBooksTap: () {
+              setState(() {
+                activeAction = "Books";
+                activeActionBarWidget = const BardenBooks();
+              });
+          
+            },
+            onSettingsTap: () {
+              setState(() {
+                activeAction = "Settings";
+                activeActionBarWidget = const BardenSettings();
+              });
+          
+            },
+          ),
+          activeActionBarWidget
+        ],
+      ),
     );
   }
 }

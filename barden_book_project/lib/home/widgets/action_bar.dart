@@ -2,17 +2,24 @@ import 'package:barden_book_project/constants.dart';
 import 'package:flutter/material.dart';
 
 class BardenActionBar extends StatelessWidget {
-  const BardenActionBar({super.key, required this.onDashboardTap, required this.onManageTap, required this.onBookTap, required this.onSettingsTap});
+  BardenActionBar({super.key, 
+  required this.onDashboardTap, 
+  required this.onManageTap, 
+  required this.onBooksTap, 
+  required this.onSettingsTap,
+  required this.activeAction});
 
   final VoidCallback onDashboardTap;
   final VoidCallback onManageTap;
-  final VoidCallback onBookTap;
+  final VoidCallback onBooksTap;
   final VoidCallback onSettingsTap;
+
+  String activeAction;
 
   @override
   Widget build(BuildContext context) => Container(
     width: 80,
-    height: 240,
+    height: 300,
     decoration: BoxDecoration(
       color: bardenPurple,
       borderRadius: BorderRadius.circular(4),
@@ -23,25 +30,25 @@ class BardenActionBar extends StatelessWidget {
           text: "Dashboard",
           icon: Icons.dashboard,
           onTap: onDashboardTap,
-          isActive: false,
+          isActive: activeAction == "Dashboard",
         ),
         _ActionItem(
           text: "Manage",
           icon: Icons.manage_history,
-          onTap: () {/* Handle onTap for Manage */},
-          isActive: false,
+          onTap: onManageTap,
+          isActive: activeAction == "Manage"
         ),
         _ActionItem(
           text: "Books",
           icon: Icons.book,
-          onTap: () {/* Handle onTap for Books */},
-          isActive: false,
+          onTap: onBooksTap,
+          isActive: activeAction == "Books"
         ),
         _ActionItem(
           text: "Settings",
           icon: Icons.settings,
-          onTap: () {/* Handle onTap for Settings */},
-          isActive: false,
+          onTap: onSettingsTap,
+          isActive: activeAction == "Settings"
         ),
       ],
     ),
@@ -77,14 +84,19 @@ class __ActionItemState extends State<_ActionItem> {
       child: GestureDetector(
         onTap: widget.onTap,
         child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Container(
-            decoration: BoxDecoration(
-              border: widget.isActive ? const Border(right: BorderSide(color: Colors.white)) : null
-            ),
-            child: Icon(
-              widget.icon,
-              color: _isHovered ? Colors.white70 : Colors.white,
+          padding: const EdgeInsets.only(top: 16, bottom: 16),
+          child: Tooltip(
+            message: widget.text,
+            child: Container(
+              width: 80,
+              height: 40,
+              decoration: BoxDecoration(
+                border: widget.isActive ? const Border(right: BorderSide(color: Colors.white, width: 4)) : null
+              ),
+              child: Icon(
+                widget.icon,
+                color: _isHovered ? Colors.white70 : Colors.white,
+              ),
             ),
           ),
         ),
