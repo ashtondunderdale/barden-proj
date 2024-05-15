@@ -7,7 +7,6 @@ import 'package:barden_book_project/authentication/widgets/barden_textfield.dart
 import 'package:barden_book_project/home/views/home.dart';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -113,7 +112,7 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
         ),
         BardenTextfield(text: "username", isPassword: false, controller: usernameController),
         const SizedBox(height: 20),
-        BardenTextfield(text: "password", controller: passwordController),
+        BardenTextfield(text: "password", isPassword: true, controller: passwordController),
         const SizedBox(height: 60),
         Text(
           authMessage,
