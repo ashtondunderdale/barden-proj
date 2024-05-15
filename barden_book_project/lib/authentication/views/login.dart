@@ -142,7 +142,7 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
 
     if (!authSuccess) {
       setState(() {
-        authMessage = "Incorrect login details"; // distinguish between incorrect login and unexpected error
+        authMessage = _auth.incorrectDetailsMessage; // distinguish between incorrect login and unexpected error
       });
 
       return;
