@@ -1,4 +1,5 @@
 import 'package:barden_book_project/authentication/views/login.dart';
+import 'package:barden_book_project/home/views/home.dart';
 import 'package:flutter/material.dart';
 
 void main() =>
@@ -11,7 +12,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: Login()
+    home: Home()
   );
 }
 
