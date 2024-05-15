@@ -1,8 +1,8 @@
 import 'package:barden_book_project/home/widgets/action_bar.dart';
-import 'package:barden_book_project/home/widgets/books.dart';
-import 'package:barden_book_project/home/widgets/dashboard.dart';
-import 'package:barden_book_project/home/widgets/manage.dart';
-import 'package:barden_book_project/home/widgets/settings.dart';
+import 'package:barden_book_project/home/widgets/action_bar_pages/books.dart';
+import 'package:barden_book_project/home/widgets/action_bar_pages/dashboard.dart';
+import 'package:barden_book_project/home/widgets/action_bar_pages/manage.dart';
+import 'package:barden_book_project/home/widgets/action_bar_pages/settings.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
