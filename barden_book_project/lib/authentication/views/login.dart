@@ -37,46 +37,40 @@ class _LoginState extends State<Login> {
       ),
     ),
   );
-Widget _buildLeftLoginBox(BuildContext context) => Container(
-  width: 600,
-  height: MediaQuery.sizeOf(context).height * 0.7,
-  decoration: BoxDecoration(
-    color: bardenPurple,
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(4), 
-      bottomLeft: Radius.circular(4)
-    ),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 3,
-        blurRadius: 7,
-        offset: const Offset(-3, 0),
+    
+  Widget _buildLeftLoginBox(BuildContext context) => Container(
+    width: 600,
+    height: MediaQuery.sizeOf(context).height * 0.7,
+    decoration: BoxDecoration(
+      color: bardenPurple,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(4), 
+        bottomLeft: Radius.circular(4)
       ),
-    ],
-  ),
-  child: Stack(
-    children: [
-      Positioned.fill(
-        child: Opacity(
-          opacity: 0.15,
-          child: Image.asset(
-            '../assets/barden_primary_reading_graphic.jpg',
-            fit: BoxFit.cover,
+      boxShadow: [defaultBoxShadow],
+    ),
+    child: Stack(
+      children: [
+        Positioned.fill(
+          child: Opacity(
+            opacity: 0.15,
+            child: Image.asset(
+              '../assets/barden_primary_reading_graphic.jpg',
+              fit: BoxFit.cover,
+            ),
           ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(24),
-        child: Image.asset(
-          '../assets/barden_primary_logo.png', 
-          fit: BoxFit.fitHeight,
-          height: 140,
+        Padding(
+          padding: const EdgeInsets.all(24),
+          child: Image.asset(
+            '../assets/barden_primary_logo.png', 
+            fit: BoxFit.fitHeight,
+            height: 140,
+          ),
         ),
-      ),
-    ],
-  ),
-);
+      ],
+    ),
+  );
 
 
   Widget _buildRightLoginBox(BuildContext context) => Container(
@@ -85,14 +79,7 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
     decoration: BoxDecoration(    
       color: Colors.white,
       borderRadius: const BorderRadius.only(topRight: Radius.circular(4), bottomRight: Radius.circular(4)),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 3,
-          blurRadius: 7,
-          offset: const Offset(3, 0),
-        ),
-      ],
+      boxShadow: [defaultBoxShadow],
     ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -118,7 +105,7 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
         Text(
           authMessage,
           style: const TextStyle(
-            color: Colors.red,
+            color: Color.fromARGB(255, 234, 108, 99),
             fontSize: 12
           ),
         ),
@@ -139,14 +126,14 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
       isWaitingForLoginResponse = true;
     });
 
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1)); // TODO: remove this for prod
 
     var auth = AuthModel(
       username: usernameController.text, 
       password: passwordController.text
     );
                 
-    var authSuccess = _auth.loginWithUsernameAndPassword(auth);
+    var authSuccess = await _auth.loginWithUsernameAndPassword(auth);
 
     setState(() {
       isWaitingForLoginResponse = false;
@@ -155,6 +142,7 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
     if (!authSuccess) {
       setState(() {
         authMessage = _auth.incorrectDetailsMessage; // distinguish between incorrect login and unexpected error
+        passwordController.clear();
       });
 
       return;

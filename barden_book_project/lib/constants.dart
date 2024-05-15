@@ -5,3 +5,10 @@ Color bardenPurple = const Color.fromARGB(255, 132, 25, 132);
 Color bardenGreen = const Color.fromARGB(255, 100, 189, 33);
 
 TextStyle primaryFont = GoogleFonts.aBeeZee();
+
+var defaultBoxShadow = BoxShadow(
+  color: Colors.grey.withOpacity(0.5),
+  spreadRadius: 3,
+  blurRadius: 7,
+  offset: const Offset(3, 0),
+);
