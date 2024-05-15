@@ -1,5 +1,6 @@
 import 'package:barden_book_project/constants.dart';
 import 'package:barden_book_project/widgets/barden_button.dart';
+import 'package:barden_book_project/widgets/barden_textfield.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -10,6 +11,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: Colors.white,
@@ -29,20 +33,53 @@ class _LoginState extends State<Login> {
     height: MediaQuery.sizeOf(context).height * 0.7,
     decoration: BoxDecoration(
       color: bardenPurple,
-      borderRadius: const BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4))
+      borderRadius: const BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4)),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 3,
+          blurRadius: 7,
+          offset: const Offset(-3, 0),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(24),
+          child: Image.asset(
+            '../assets/barden_primary_logo.png', 
+            fit: BoxFit.fitHeight,
+            height: 140,
+          ),
+        ),
+      ],
     ),
   );
 
   Widget _buildRightLoginBox(BuildContext context) => Container(
     width: 400,
     height: MediaQuery.sizeOf(context).height * 0.7,
-    decoration: const BoxDecoration(    
-      color: Color.fromARGB(255, 224, 224, 224),
-      borderRadius: BorderRadius.only(topRight: Radius.circular(4), bottomRight: Radius.circular(4))
+    decoration: BoxDecoration(    
+      color: Colors.white,
+      borderRadius: const BorderRadius.only(topRight: Radius.circular(4), bottomRight: Radius.circular(4)),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 3,
+          blurRadius: 7,
+          offset: const Offset(3, 0),
+        ),
+      ],
     ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        BardenTextfield(text: "email", isPassword: false, controller: emailController),
+        const SizedBox(height: 20),
+        BardenTextfield(text: "password", controller: passwordController),
+        const SizedBox(height: 60),
         BardenButton(
           text: "LOGIN", 
           onPressed: () {
