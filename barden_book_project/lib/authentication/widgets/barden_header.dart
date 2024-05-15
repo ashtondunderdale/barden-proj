@@ -20,7 +20,7 @@ class BardenHeader extends StatelessWidget {
       const Text(
         "Library Management",
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 14,
           color: Colors.grey,
           letterSpacing: 1
         ),

@@ -18,6 +18,8 @@ class _LoginState extends State<Login> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  String authMessage = "";
+
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: Colors.white,
@@ -31,36 +33,47 @@ class _LoginState extends State<Login> {
       ),
     ),
   );
-
-  Widget _buildLeftLoginBox(BuildContext context) => Container(
-    width: 600,
-    height: MediaQuery.sizeOf(context).height * 0.7,
-    decoration: BoxDecoration(
-      color: bardenPurple,
-      borderRadius: const BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4)),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 3,
-          blurRadius: 7,
-          offset: const Offset(-3, 0),
-        ),
-      ],
+Widget _buildLeftLoginBox(BuildContext context) => Container(
+  width: 600,
+  height: MediaQuery.sizeOf(context).height * 0.7,
+  decoration: BoxDecoration(
+    color: bardenPurple,
+    borderRadius: const BorderRadius.only(
+      topLeft: Radius.circular(4), 
+      bottomLeft: Radius.circular(4)
     ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(24),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 3,
+        blurRadius: 7,
+        offset: const Offset(-3, 0),
+      ),
+    ],
+  ),
+  child: Stack(
+    children: [
+      Positioned.fill(
+        child: Opacity(
+          opacity: 0.15,
           child: Image.asset(
-            '../assets/barden_primary_logo.png', 
-            fit: BoxFit.fitHeight,
-            height: 140,
+            '../assets/barden_primary_reading_graphic.jpg',
+            fit: BoxFit.cover,
           ),
         ),
-      ],
-    ),
-  );
+      ),
+      Padding(
+        padding: const EdgeInsets.all(24),
+        child: Image.asset(
+          '../assets/barden_primary_logo.png', 
+          fit: BoxFit.fitHeight,
+          height: 140,
+        ),
+      ),
+    ],
+  ),
+);
+
 
   Widget _buildRightLoginBox(BuildContext context) => Container(
     width: 400,
@@ -98,12 +111,27 @@ class _LoginState extends State<Login> {
         const SizedBox(height: 20),
         BardenTextfield(text: "password", controller: passwordController),
         const SizedBox(height: 60),
+        Text(
+          authMessage,
+          style: const TextStyle(
+            color: Colors.red,
+            fontSize: 12
+          ),
+        ),
         BardenButton(
           text: "LOGIN", 
           onPressed: () {
             var authSuccess = _auth.loginWithUsernameAndPassword(usernameController.text, passwordController.text);
+            authSuccess = false;
+
+            if (!authSuccess) {
+              setState(() {
+                authMessage = "Incorrect login details"; // distinguish between incorrect login and unexpected error
+              });
+            }
           }
-        )
+        ),
+        const SizedBox(height: 20)
       ],
     ),
   );
