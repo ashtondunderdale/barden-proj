@@ -1,3 +1,4 @@
+import 'package:barden_book_project/constants.dart';
 import 'package:barden_book_project/widgets/barden_button.dart';
 import 'package:flutter/material.dart';
 
@@ -26,9 +27,9 @@ class _LoginState extends State<Login> {
   Widget _buildLeftLoginBox(BuildContext context) => Container(
     width: 600,
     height: MediaQuery.sizeOf(context).height * 0.7,
-    decoration: const BoxDecoration(
-      color: Color.fromARGB(255, 141, 84, 167),
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(4), bottomRight: Radius.circular(4))
+    decoration: BoxDecoration(
+      color: bardenPurple,
+      borderRadius: const BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4))
     ),
   );
 
@@ -43,7 +44,7 @@ class _LoginState extends State<Login> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         BardenButton(
-          text: "Login", 
+          text: "LOGIN", 
           onPressed: () {
             // authenticate here
           }

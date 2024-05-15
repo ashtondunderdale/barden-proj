@@ -1,3 +1,4 @@
+import 'package:barden_book_project/constants.dart';
 import 'package:flutter/material.dart';
 
 class BardenButton extends StatefulWidget {
@@ -27,11 +28,11 @@ class _BardenButtonState extends State<BardenButton> {
             opacity: isHovered ? 0.7 : 1.0,
             duration: const Duration(milliseconds: 200),
             child: Container(
-              width: 200,
+              width: 240,
               height: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: const Color.fromARGB(255, 100, 189, 33)                   
+                color: bardenGreen                 
               ),
               child: Center(
                 child: Text(
@@ -39,7 +40,8 @@ class _BardenButtonState extends State<BardenButton> {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    fontSize: 13,
+                    fontSize: 12,
+                    letterSpacing: 1
                   ),
                 ),
               ),
