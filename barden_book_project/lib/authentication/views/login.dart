@@ -1,6 +1,8 @@
+import 'package:barden_book_project/authentication/services/auth.dart';
 import 'package:barden_book_project/constants.dart';
-import 'package:barden_book_project/widgets/barden_button.dart';
-import 'package:barden_book_project/widgets/barden_textfield.dart';
+import 'package:barden_book_project/authentication/widgets/barden_button.dart';
+import 'package:barden_book_project/authentication/widgets/barden_header.dart';
+import 'package:barden_book_project/authentication/widgets/barden_textfield.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -11,7 +13,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final TextEditingController emailController = TextEditingController();
+  BardenAuth _auth = BardenAuth();
+
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
@@ -76,14 +80,28 @@ class _LoginState extends State<Login> {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        BardenTextfield(text: "email", isPassword: false, controller: emailController),
+        const SizedBox(height: 20),
+        const BardenHeader(),
+        const Spacer(),
+        const Padding(
+          padding: EdgeInsets.only(right: 136),
+          child: Text(
+            "STAFF LOGIN",
+            style: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              fontSize: 24
+            ),
+          ),
+        ),
+        BardenTextfield(text: "username", isPassword: false, controller: usernameController),
         const SizedBox(height: 20),
         BardenTextfield(text: "password", controller: passwordController),
         const SizedBox(height: 60),
         BardenButton(
           text: "LOGIN", 
           onPressed: () {
-            // authenticate here
+            var authSuccess = _auth.loginWithUsernameAndPassword(usernameController.text, passwordController.text);
           }
         )
       ],
