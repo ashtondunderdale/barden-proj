@@ -12,14 +12,15 @@ class BardenTextfield extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(
     width: 280,
     child: TextField(
-      style: const TextStyle(
+      controller: controller,
+      style: primaryFont.copyWith(
         color: Colors.grey,
         fontSize: 12
       ),
       obscureText: isPassword,
       decoration: InputDecoration(
         labelText: text,
-        labelStyle: const TextStyle(
+        labelStyle: primaryFont.copyWith(
           color: Colors.grey,
           fontSize: 12
         ),

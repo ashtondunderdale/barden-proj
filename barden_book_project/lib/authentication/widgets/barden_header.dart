@@ -10,16 +10,16 @@ class BardenHeader extends StatelessWidget {
     children: [
       Text(
         "Barden Primary",
-        style: TextStyle(
+        style: primaryFont.copyWith(
           fontSize: 32,
           fontWeight: FontWeight.bold,
           color: bardenPurple,
           letterSpacing: 1
         ),
       ),
-      const Text(
+      Text(
         "Library Management",
-        style: TextStyle(
+        style: primaryFont.copyWith(
           fontSize: 14,
           color: Colors.grey,
           letterSpacing: 1

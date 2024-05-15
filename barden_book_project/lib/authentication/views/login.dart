@@ -1,9 +1,13 @@
+import 'package:barden_book_project/authentication/models/login.dart';
 import 'package:barden_book_project/authentication/services/auth.dart';
 import 'package:barden_book_project/constants.dart';
 import 'package:barden_book_project/authentication/widgets/barden_button.dart';
 import 'package:barden_book_project/authentication/widgets/barden_header.dart';
 import 'package:barden_book_project/authentication/widgets/barden_textfield.dart';
+import 'package:barden_book_project/home/views/home.dart';
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,10 +17,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  BardenAuth _auth = BardenAuth();
+  final _auth = BardenAuth();
 
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
 
   String authMessage = "";
 
@@ -96,11 +100,11 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
         const SizedBox(height: 20),
         const BardenHeader(),
         const Spacer(),
-        const Padding(
-          padding: EdgeInsets.only(right: 136),
+        Padding(
+          padding: const EdgeInsets.only(right: 136),
           child: Text(
             "STAFF LOGIN",
-            style: TextStyle(
+            style: primaryFont.copyWith(
               color: Colors.grey,
               fontWeight: FontWeight.bold,
               fontSize: 24
@@ -121,18 +125,30 @@ Widget _buildLeftLoginBox(BuildContext context) => Container(
         BardenButton(
           text: "LOGIN", 
           onPressed: () {
-            var authSuccess = _auth.loginWithUsernameAndPassword(usernameController.text, passwordController.text);
-            authSuccess = false;
-
-            if (!authSuccess) {
-              setState(() {
-                authMessage = "Incorrect login details"; // distinguish between incorrect login and unexpected error
-              });
-            }
+            _tryLogin();
           }
         ),
         const SizedBox(height: 20)
       ],
     ),
   );
+
+  void _tryLogin() {
+    var auth = AuthModel(
+      username: usernameController.text, 
+      password: passwordController.text
+    );
+                
+    var authSuccess = _auth.loginWithUsernameAndPassword(auth);
+
+    if (!authSuccess) {
+      setState(() {
+        authMessage = "Incorrect login details"; // distinguish between incorrect login and unexpected error
+      });
+
+      return;
+    } 
+      
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+  }
 }

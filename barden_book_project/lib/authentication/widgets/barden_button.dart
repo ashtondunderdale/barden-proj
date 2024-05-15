@@ -37,7 +37,7 @@ class _BardenButtonState extends State<BardenButton> {
               child: Center(
                 child: Text(
                   widget.text,
-                  style: const TextStyle(
+                  style: primaryFont.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize: 12,
