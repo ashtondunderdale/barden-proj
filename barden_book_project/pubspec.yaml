@@ -1,5 +1,5 @@
 name: barden_book_project
-description: "A new Flutter project."
+description: "Barden Primary School Book Management"
 publish_to: 'none'
 version: 0.1.0
 
@@ -17,3 +17,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/barden_primary_logo.png
