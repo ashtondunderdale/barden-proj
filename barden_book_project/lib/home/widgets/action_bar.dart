@@ -18,11 +18,10 @@ class BardenActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    width: 80,
-    height: 300,
+    width: 70,
+    height: MediaQuery.sizeOf(context).height,
     decoration: BoxDecoration(
       color: bardenPurple,
-      borderRadius: BorderRadius.circular(4),
     ),
     child: Column(
       children: [

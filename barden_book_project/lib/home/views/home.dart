@@ -17,45 +17,40 @@ class _HomeState extends State<Home> {
   Widget activeActionBarWidget = const BardenDashboard();
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 238, 238, 238),
-      body: Row(
-        children: [
-          BardenActionBar(
-            activeAction: activeAction,
-            onDashboardTap: () {
-              setState(() {
-                activeAction = "Dashboard";
-                activeActionBarWidget = const BardenDashboard();
-              });
-          
-            },
-            onManageTap: () {
-              setState(() {
-                activeAction = "Manage";
-                activeActionBarWidget = const BardenManage();
-              });
-          
-            },
-            onBooksTap: () {
-              setState(() {
-                activeAction = "Books";
-                activeActionBarWidget = const BardenBooks();
-              });
-          
-            },
-            onSettingsTap: () {
-              setState(() {
-                activeAction = "Settings";
-                activeActionBarWidget = const BardenSettings();
-              });
-          
-            },
-          ),
-          activeActionBarWidget
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+    backgroundColor: const Color.fromARGB(255, 238, 238, 238),
+    body: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        BardenActionBar(
+          activeAction: activeAction,
+          onDashboardTap: () {
+            setState(() {
+              activeAction = "Dashboard";
+              activeActionBarWidget = const BardenDashboard();
+            });       
+          },
+          onManageTap: () {
+            setState(() {
+              activeAction = "Manage";
+              activeActionBarWidget = const BardenManage();
+            });        
+          },
+          onBooksTap: () {
+            setState(() {
+              activeAction = "Books";
+              activeActionBarWidget = const BardenBooks();
+            });        
+          },
+          onSettingsTap: () {
+            setState(() {
+              activeAction = "Settings";
+              activeActionBarWidget = const BardenSettings();
+            });       
+          },
+        ),
+        activeActionBarWidget
+      ],
+    ),
+  );
 }
