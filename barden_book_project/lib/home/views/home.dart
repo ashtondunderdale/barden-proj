@@ -1,3 +1,4 @@
+import 'package:barden_book_project/authentication/widgets/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
 import 'package:barden_book_project/home/widgets/action_bar_pages/books.dart';
 import 'package:barden_book_project/home/widgets/action_bar_pages/dashboard.dart';
@@ -54,16 +55,28 @@ class _HomeState extends State<Home> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 32, top: 16),
-              child: Text(
-                activeAction,
-                style: primaryFont.copyWith(
-                  color: const Color.fromARGB(255, 36, 36, 36),
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 32, top: 16),
+                  child: Text(
+                    activeAction,
+                    style: primaryFont.copyWith(
+                      color: const Color.fromARGB(255, 36, 36, 36),
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(width: 1000),
+                BardenButton(
+                  text: "LOGOUT", 
+                  onPressed: () {
+
+                  }, 
+                  isLoading: false
+                )
+              ],
             ),
             Padding(
               padding: const EdgeInsets.only(left: 32, top: 32),
