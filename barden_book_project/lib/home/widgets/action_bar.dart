@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 
 class BardenActionBar extends StatelessWidget {
   BardenActionBar({super.key, 
-  required this.onDashboardTap, 
-  required this.onManageTap, 
-  required this.onBooksTap, 
-  required this.onSettingsTap,
-  required this.activeAction});
+    required this.activeAction, 
+    required this.onDashboardTap, 
+    required this.onManageTap, 
+    required this.onBooksTap, 
+    required this.onSettingsTap,
+    required this.onUploadTap
+  });
 
   final VoidCallback onDashboardTap;
   final VoidCallback onManageTap;
   final VoidCallback onBooksTap;
   final VoidCallback onSettingsTap;
+  final VoidCallback onUploadTap;
 
   String activeAction;
 
@@ -48,6 +51,13 @@ class BardenActionBar extends StatelessWidget {
           icon: Icons.settings,
           onTap: onSettingsTap,
           isActive: activeAction == "Settings"
+        ),
+        const Spacer(),
+        _ActionItem(
+          text: "Upload",
+          icon: Icons.upload_file,
+          onTap: onUploadTap,
+          isActive: activeAction == "Upload"
         ),
       ],
     ),

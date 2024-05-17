@@ -1,3 +1,4 @@
+import 'package:barden_book_project/home/services/blob.dart';
 import 'package:barden_book_project/login/views/login.dart';
 import 'package:barden_book_project/login/widgets/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
@@ -5,9 +6,10 @@ import 'package:barden_book_project/home/widgets/action_bar_pages/books.dart';
 import 'package:barden_book_project/home/widgets/action_bar_pages/dashboard.dart';
 import 'package:barden_book_project/home/widgets/action_bar_pages/manage.dart';
 import 'package:barden_book_project/home/widgets/action_bar_pages/settings.dart';
-import 'package:flutter/material.dart';
-
 import '../../constants.dart';
+
+import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,6 +19,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _blob = BlobService();
+
   String activeAction = "Dashboard";
   Widget activeActionBarWidget = const BardenDashboard();
 
@@ -52,6 +56,9 @@ class _HomeState extends State<Home> {
               activeActionBarWidget = const BardenSettings();
             });       
           },
+          onUploadTap: () async {
+            _blob.getFiles();
+          }
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

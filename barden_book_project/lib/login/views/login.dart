@@ -113,7 +113,10 @@ class _LoginState extends State<Login> {
             children: [
               Checkbox(value: rememberMe, activeColor: bardenPurple,
               onChanged: (_) {
-                setState(() => rememberMe = !rememberMe );
+                setState(() { 
+                  rememberMe = !rememberMe;
+                  _deleteSavedLoginDetails(); 
+                });
               }),
               Text(
                 "Remember me",
