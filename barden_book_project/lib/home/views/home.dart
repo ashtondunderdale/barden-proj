@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
             Row(
               children: [
                 SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.78,
+                  width: MediaQuery.sizeOf(context).width * 0.85,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 32, top: 16),
                     child: Text(
@@ -73,6 +73,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 BardenButton(
+                  width: 100,
                   text: "LOGOUT", 
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));

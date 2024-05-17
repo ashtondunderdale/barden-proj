@@ -6,6 +6,7 @@ import 'package:barden_book_project/authentication/widgets/barden_header.dart';
 import 'package:barden_book_project/authentication/widgets/barden_textfield.dart';
 import 'package:barden_book_project/home/views/home.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -17,12 +18,20 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _auth = BardenAuth();
-
+  final _storage = const FlutterSecureStorage();
+  
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
   String authMessage = "";
+  bool rememberMe = false;
   bool isWaitingForLoginResponse = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _getSavedLoginDetails();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -101,6 +110,27 @@ class _LoginState extends State<Login> {
         BardenTextfield(text: "username", isPassword: false, controller: usernameController),
         const SizedBox(height: 20),
         BardenTextfield(text: "password", isPassword: true, controller: passwordController),
+        Padding(
+          padding: const EdgeInsets.only(left: 60, top: 16),
+          child: Row(
+            children: [
+              Checkbox(value: rememberMe, semanticLabel: "c", activeColor: bardenPurple,
+              onChanged: (_) {
+                setState(() {
+                  rememberMe = !rememberMe;
+                });
+              }),
+              Text(
+                "Remember me",
+                style: primaryFont.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                  fontSize: 12
+                ),
+              )
+            ],
+          ),
+        ),
         const SizedBox(height: 60),
         Text(
           authMessage,
@@ -110,6 +140,7 @@ class _LoginState extends State<Login> {
           ),
         ),
         BardenButton(
+          width: 200,
           isLoading: isWaitingForLoginResponse,
           text: "LOGIN", 
           onPressed: () {
@@ -129,11 +160,11 @@ class _LoginState extends State<Login> {
     await Future.delayed(const Duration(seconds: 1)); // TODO: remove this for prod
 
     var auth = AuthModel(
-      username: usernameController.text, 
+      username: usernameController.text,
       password: passwordController.text
     );
-                
-    var authSuccess = await _auth.loginWithUsernameAndPassword(auth);
+
+    var authSuccess = _auth.loginWithUsernameAndPassword(auth);
 
     setState(() {
       isWaitingForLoginResponse = false;
@@ -141,13 +172,44 @@ class _LoginState extends State<Login> {
 
     if (!authSuccess) {
       setState(() {
-        authMessage = _auth.incorrectDetailsMessage; // distinguish between incorrect login and unexpected error
+        authMessage = _auth.incorrectDetailsMessage;
         passwordController.clear();
       });
 
       return;
-    } 
-      
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+    }
+
+    if (rememberMe) {
+      _loadSavedLoginDetails();
+    } else {
+      _deleteSavedLoginDetails();
+    }
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const Home()));
+  }
+
+  void _loadSavedLoginDetails() async {
+    await _storage.write(key: 'password', value: passwordController.text);
+    await _storage.write(key: 'username', value: usernameController.text);
+  }
+
+  void _deleteSavedLoginDetails() async {
+      await _storage.delete(key: 'password');
+      await _storage.delete(key: 'username');
+  }
+
+  void _getSavedLoginDetails() async {
+    String savedPassword = await _storage.read(key: 'password') ?? '';
+    String savedUsername = await _storage.read(key: 'username') ?? '';
+
+    setState(() {
+      if (savedPassword.isNotEmpty) {
+        passwordController.text = savedPassword;
+        usernameController.text = savedUsername;
+
+        rememberMe = true;
+      }
+    });
   }
 }

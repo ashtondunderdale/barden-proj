@@ -2,11 +2,12 @@ import 'package:barden_book_project/constants.dart';
 import 'package:flutter/material.dart';
 
 class BardenButton extends StatefulWidget {
-  const BardenButton({super.key, required this.text, required this.onPressed, required this.isLoading});
+  const BardenButton({super.key, required this.text, required this.onPressed, required this.isLoading, required this.width});
 
   final String text;
   final VoidCallback onPressed;
   final bool isLoading;
+  final double width;
 
   @override
   State<BardenButton> createState() => _BardenButtonState();
@@ -28,7 +29,7 @@ class _BardenButtonState extends State<BardenButton> {
           opacity: isHovered ? 0.7 : 1.0,
           duration: const Duration(milliseconds: 200),
           child: Container(
-            width: 240,
+            width: widget.width,
             height: 40,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
