@@ -1,7 +1,6 @@
-import 'package:barden_book_project/authentication/models/login.dart';
+import 'package:barden_book_project/login/models/login.dart';
 
 class BardenAuth {
-
   String incorrectDetailsMessage = "Username or password is incorrect.";
 
   bool loginWithUsernameAndPassword(AuthModel auth) {

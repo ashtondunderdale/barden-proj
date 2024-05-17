@@ -1,9 +1,9 @@
-import 'package:barden_book_project/authentication/models/login.dart';
-import 'package:barden_book_project/authentication/services/auth.dart';
+import 'package:barden_book_project/login/models/login.dart';
+import 'package:barden_book_project/login/services/auth.dart';
 import 'package:barden_book_project/constants.dart';
-import 'package:barden_book_project/authentication/widgets/barden_button.dart';
-import 'package:barden_book_project/authentication/widgets/barden_header.dart';
-import 'package:barden_book_project/authentication/widgets/barden_textfield.dart';
+import 'package:barden_book_project/login/widgets/barden_button.dart';
+import 'package:barden_book_project/login/widgets/barden_header.dart';
+import 'package:barden_book_project/login/widgets/barden_textfield.dart';
 import 'package:barden_book_project/home/views/home.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -63,17 +63,14 @@ class _LoginState extends State<Login> {
         Positioned.fill(
           child: Opacity(
             opacity: 0.15,
-            child: Image.asset(
-              '../assets/barden_primary_reading_graphic.jpg',
+            child: Image.asset('../assets/barden_primary_reading_graphic.jpg',
               fit: BoxFit.cover,
             ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(24),
-          child: Image.asset(
-            '../assets/barden_primary_logo.png', 
-            fit: BoxFit.fitHeight,
+          child: Image.asset('../assets/barden_primary_logo.png', 
             height: 140,
           ),
         ),
@@ -114,11 +111,9 @@ class _LoginState extends State<Login> {
           padding: const EdgeInsets.only(left: 60, top: 16),
           child: Row(
             children: [
-              Checkbox(value: rememberMe, semanticLabel: "c", activeColor: bardenPurple,
+              Checkbox(value: rememberMe, activeColor: bardenPurple,
               onChanged: (_) {
-                setState(() {
-                  rememberMe = !rememberMe;
-                });
+                setState(() => rememberMe = !rememberMe );
               }),
               Text(
                 "Remember me",
@@ -153,9 +148,7 @@ class _LoginState extends State<Login> {
   );
 
   void _tryLogin() async {
-    setState(() {
-      isWaitingForLoginResponse = true;
-    });
+    setState(() => isWaitingForLoginResponse = true );
 
     await Future.delayed(const Duration(seconds: 1)); // TODO: remove this for prod
 
@@ -166,9 +159,7 @@ class _LoginState extends State<Login> {
 
     var authSuccess = _auth.loginWithUsernameAndPassword(auth);
 
-    setState(() {
-      isWaitingForLoginResponse = false;
-    });
+    setState(() => isWaitingForLoginResponse = false);
 
     if (!authSuccess) {
       setState(() {
@@ -195,21 +186,23 @@ class _LoginState extends State<Login> {
   }
 
   void _deleteSavedLoginDetails() async {
-      await _storage.delete(key: 'password');
-      await _storage.delete(key: 'username');
+    await _storage.delete(key: 'password');
+    await _storage.delete(key: 'username');
   }
 
   void _getSavedLoginDetails() async {
     String savedPassword = await _storage.read(key: 'password') ?? '';
     String savedUsername = await _storage.read(key: 'username') ?? '';
+    
+    if (savedPassword.isEmpty) {
+      return;
+    }
 
     setState(() {
-      if (savedPassword.isNotEmpty) {
-        passwordController.text = savedPassword;
-        usernameController.text = savedUsername;
+      passwordController.text = savedPassword;
+      usernameController.text = savedUsername;
 
-        rememberMe = true;
-      }
+      rememberMe = true;     
     });
   }
 }

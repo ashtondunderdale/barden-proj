@@ -1,5 +1,5 @@
-import 'package:barden_book_project/authentication/views/login.dart';
-import 'package:barden_book_project/authentication/widgets/barden_button.dart';
+import 'package:barden_book_project/login/views/login.dart';
+import 'package:barden_book_project/login/widgets/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
 import 'package:barden_book_project/home/widgets/action_bar_pages/books.dart';
 import 'package:barden_book_project/home/widgets/action_bar_pages/dashboard.dart';

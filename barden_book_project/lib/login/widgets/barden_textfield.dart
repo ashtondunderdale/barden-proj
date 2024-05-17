@@ -2,8 +2,7 @@ import 'package:barden_book_project/constants.dart';
 import 'package:flutter/material.dart';
 
 class BardenTextfield extends StatefulWidget {
-  const BardenTextfield({
-    Key? key,
+  const BardenTextfield({super.key, 
     required this.text,
     required this.isPassword,
     required this.controller,
