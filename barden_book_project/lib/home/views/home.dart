@@ -1,3 +1,4 @@
+import 'package:barden_book_project/authentication/views/login.dart';
 import 'package:barden_book_project/authentication/widgets/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
 import 'package:barden_book_project/home/widgets/action_bar_pages/books.dart';
@@ -57,22 +58,24 @@ class _HomeState extends State<Home> {
           children: [
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 32, top: 16),
-                  child: Text(
-                    activeAction,
-                    style: primaryFont.copyWith(
-                      color: const Color.fromARGB(255, 36, 36, 36),
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.78,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 32, top: 16),
+                    child: Text(
+                      activeAction,
+                      style: primaryFont.copyWith(
+                        color: const Color.fromARGB(255, 36, 36, 36),
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 1000),
                 BardenButton(
                   text: "LOGOUT", 
                   onPressed: () {
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
                   }, 
                   isLoading: false
                 )
@@ -81,7 +84,7 @@ class _HomeState extends State<Home> {
             Padding(
               padding: const EdgeInsets.only(left: 32, top: 32),
               child: Container(
-                width: MediaQuery.sizeOf(context).width * 0.8,
+                width: MediaQuery.sizeOf(context).width * 0.9,
                 height: MediaQuery.sizeOf(context).height * 0.8,
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 235, 235, 235),

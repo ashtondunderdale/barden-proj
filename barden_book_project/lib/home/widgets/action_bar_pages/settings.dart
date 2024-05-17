@@ -5,6 +5,6 @@ class BardenSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("settings");
+    return Container();
   }
 }

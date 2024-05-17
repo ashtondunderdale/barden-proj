@@ -5,6 +5,6 @@ class BardenManage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("manage");
+    return Container();
   }
 }
