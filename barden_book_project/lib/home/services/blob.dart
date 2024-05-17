@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
@@ -15,8 +17,15 @@ class BlobService {
         return;
       }
 
+      List<String> httpMessages = [];
+
       for (var file in chosenFiles.files) {
-        await uploadFileToAzure(file);
+        await uploadFileToAzure(file, httpMessages);
+      }
+
+      print("================RESPONSES================\n");
+      for (var response in httpMessages) {
+        print(response);
       }
 
     } catch (exception) {
@@ -24,21 +33,18 @@ class BlobService {
     }
   }
 
-  Future<bool> uploadFileToAzure(PlatformFile file) async {
+  Future<bool> uploadFileToAzure(PlatformFile file, List<String> httpMessages) async {
+    final fileName = file.name;
+    final fileBytes = file.bytes;
+    
     try {
-      final fileName = file.name;
-      final fileBytes = file.bytes;
-
-      print("Uploading File: $fileName");
-
       if (fileBytes == null) {
         throw Exception("File bytes are null");
       }
 
       final url = 'https://azureBlobUrl';
 
-      final response = await http.put(
-        Uri.parse(url),
+      final response = await http.put(Uri.parse(url),
         headers: {
           'x-ms-blob-type': 'BlockBlob',
           'Content-Type': file.extension ?? 'application/octet-stream',
@@ -46,10 +52,12 @@ class BlobService {
         body: fileBytes,
       );
 
+      httpMessages.add("$fileName : ${response.statusCode}");
+
       return response.statusCode == 200;
       
     } catch (exception) {
-      print('Error uploading file: $exception');
+      httpMessages.add("$fileName : $exception");
       return false;
     }
   }
