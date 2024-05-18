@@ -1,4 +1,3 @@
-import 'package:barden_book_project/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/book.dart';
@@ -48,10 +47,9 @@ class _BookItemState extends State<BookItem> {
               )
             ],
           ),
-          child: const Center(
-            child: Text(
-              "book image here"
-            ),
+          child: Image.network(
+            widget.book.coverUrl,
+            fit: BoxFit.fitHeight,
           ),
         ),
       ),

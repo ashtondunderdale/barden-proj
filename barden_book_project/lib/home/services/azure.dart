@@ -1,19 +1,50 @@
+import 'package:barden_book_project/_key.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:azstore/azstore.dart';
 
 import '../../login/models/login.dart';
+import '../models/book.dart';
 
 class AzureService {
-  final String storageAccountName = '';
-  final String containerName = '';
-  final String sasToken = '';
-
   Future<bool> loginWithUsernameAndPassword(AuthModel auth) async {
 
-    // auth
     
-    await Future.delayed(const Duration(seconds: 1));
     return true;
+  }
+
+  Future<List<Book>?> getBooks() async {
+    try {
+      var storage = AzureStorage.parse(connStr);
+      var result = await storage.filterTableRows(tableName: 'bookinventory', filter: "");
+
+      List<Book> books = [];
+
+      for (var jsonBook in result) {
+        books.add(Book(
+          title: jsonBook['Title'] ?? "", 
+          author: jsonBook['Author'] ?? "", 
+          isbn: jsonBook['ISBN'] ?? "", 
+          coverUrl: jsonBook['Cover'] ?? "",
+          
+          category: jsonBook['Category'] ?? "",
+          lexileLevel: jsonBook["Lexile Level"] ?? "", 
+          publisher: jsonBook["Publisher"] ?? "",
+          readingYear: jsonBook["Reading Year"] ?? "",
+          releaseYear: jsonBook["Release Year"] ?? "",
+          language: jsonBook["Language"] ?? "",
+          blScore: jsonBook["BL Score"] ?? "",
+
+          numberAvailable: 0, 
+          isVisible: true
+        ));
+      }
+
+      return books;
+    } catch (exception) {
+      print(exception);
+      return null;
+    }
   }
 
   void getFiles() async {

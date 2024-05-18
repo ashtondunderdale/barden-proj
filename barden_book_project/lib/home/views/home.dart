@@ -7,6 +7,8 @@ import '../../constants.dart';
 
 import 'package:flutter/material.dart';
 
+import '../models/book.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,9 +21,21 @@ class _HomeState extends State<Home> {
   final _azure = AzureService();
 
   String activeAction = "Inventory";
-  Widget activeActionBarWidget = BardenInventory(books: books);
-
+  Widget activeActionBarWidget = const BardenInventory(books: []);
   String activeCategory = "";
+  
+  List<Book> books = [];
+
+  @override
+  void initState() {
+    super.initState();
+    initializeBooks();
+  }
+
+  void initializeBooks() async {
+    books = await _azure.getBooks() ?? [];
+    activeActionBarWidget = BardenInventory(books: books);
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(

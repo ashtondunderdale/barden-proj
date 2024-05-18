@@ -1,12 +1,8 @@
-import 'package:barden_book_project/common/barden_field.dart';
-import 'package:barden_book_project/constants.dart';
 import 'package:barden_book_project/home/models/book.dart';
 import 'package:barden_book_project/home/widgets/inventory/book_item.dart';
 import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/inventory/expanded/book_author_top.dart';
 import 'package:flutter/material.dart';
-
-import 'book_search_bar.dart';
 
 
 class BardenInventory extends StatefulWidget {
