@@ -28,13 +28,15 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    super.initState();
     initializeBooks();
+    super.initState();
   }
 
   void initializeBooks() async {
     books = await _azure.getBooks() ?? [];
-    activeActionBarWidget = BardenInventory(books: books);
+    setState(() {
+      activeActionBarWidget = BardenInventory(books: books);    
+    });
   }
 
   @override

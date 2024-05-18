@@ -7,19 +7,19 @@ class Book {
   String category;
   String lexileLevel;
   String publisher;
-  String readingYear; // year 5, year 4, etc
+  String readingYear;
   String releaseYear;
   String language;
-  String blScore;
+  double blScore;
   
-  int numberAvailable;
+  int numberOfCopies;
 
   bool isVisible; 
 
   Book({
     required this.title, 
     required this.author, 
-    required this.numberAvailable,
+    required this.numberOfCopies,
     required this.category,
     required this.isbn,
     required this.language,

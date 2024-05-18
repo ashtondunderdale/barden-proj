@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:barden_book_project/_key.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
@@ -16,29 +18,31 @@ class AzureService {
   Future<List<Book>?> getBooks() async {
     try {
       var storage = AzureStorage.parse(connStr);
-      var result = await storage.filterTableRows(tableName: 'bookinventory', filter: "");
+      var result = await storage.filterTableRows(tableName: 'bookinventory', filter: "", top: 300);
 
       List<Book> books = [];
 
       for (var jsonBook in result) {
         books.add(Book(
-          title: jsonBook['Title'] ?? "", 
-          author: jsonBook['Author'] ?? "", 
-          isbn: jsonBook['ISBN'] ?? "", 
-          coverUrl: jsonBook['Cover'] ?? "",
+          title: jsonBook['Title'] ?? "null title", 
+          author: jsonBook['Author'] ?? "null author", 
+          isbn: jsonBook['ISBN'] ?? "null isbn", 
+          coverUrl: jsonBook['Cover'] ?? "null cover",
           
           category: jsonBook['Category'] ?? "",
-          lexileLevel: jsonBook["Lexile Level"] ?? "", 
-          publisher: jsonBook["Publisher"] ?? "",
-          readingYear: jsonBook["Reading Year"] ?? "",
-          releaseYear: jsonBook["Release Year"] ?? "",
-          language: jsonBook["Language"] ?? "",
-          blScore: jsonBook["BL Score"] ?? "",
+          lexileLevel: jsonBook['Lexile_Level'] ?? "", 
+          publisher: jsonBook['Publisher'] ?? "",
+          readingYear: jsonBook['Reading_Year'] ?? "",
+          releaseYear: jsonBook['Release_Year'] ?? "",
+          language: jsonBook['Language'] ?? "",
+          blScore: jsonBook['BL_Score'] ?? -1,
+          numberOfCopies: jsonBook['Number_Of_Copies'] ?? -1,
 
-          numberAvailable: 0, 
           isVisible: true
         ));
       }
+
+      print(books.length);
 
       return books;
     } catch (exception) {
