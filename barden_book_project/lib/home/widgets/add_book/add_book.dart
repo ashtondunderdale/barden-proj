@@ -1,5 +1,5 @@
 import 'package:barden_book_project/common/barden_close_icon.dart';
-import 'package:barden_book_project/home/services/blob.dart';
+import 'package:barden_book_project/home/services/azure.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/barden_button.dart';
@@ -16,10 +16,13 @@ class BardenAddBook extends StatefulWidget {
 }
 
 class _BardenAddBookState extends State<BardenAddBook> {
-  final _blob = BlobService();
+  final _azure = AzureService();
 
-  String dropdownValue = readingCategories.first;
-  bool isLoading = false;
+  final _isbnController = TextEditingController();
+  final _yearController = TextEditingController();
+  String _dropdownValue = readingCategories.first;
+  
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -45,19 +48,10 @@ class _BardenAddBookState extends State<BardenAddBook> {
               ],
             ),
             BardenField(
+              controller: _isbnController,
               width: 240,
               fieldName: "ISBN", 
-              onFieldChanged: () {
-                setState(() {
-                  isLoading = true;
-                });
-
-                _blob.addNewBook();
-
-                setState(() {
-                  isLoading = false;
-                });
-              }
+              onFieldChanged: () {}
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -66,12 +60,10 @@ class _BardenAddBookState extends State<BardenAddBook> {
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
                     child: DropdownButton<String>(
-                      value: dropdownValue,
+                      value: _dropdownValue,
                       onChanged: (val) {
                         widget.onCategoryChanged(val!);    
-                        setState(() {
-                          dropdownValue = val;
-                        });
+                        setState(() => _dropdownValue = val );
                       },
                       items: readingCategories.map((e) => DropdownMenuItem<String>(
                         value: e, child: Text(e)
@@ -85,11 +77,11 @@ class _BardenAddBookState extends State<BardenAddBook> {
                   ),
                 ),
                 BardenField(
+                  controller: _yearController,
                   width: 100,
                   fieldName: "Year", 
-                  onFieldChanged: () {
-                
-                }),
+                  onFieldChanged: () {}
+                ),
               ],
             ),
             const Spacer(),
@@ -99,9 +91,17 @@ class _BardenAddBookState extends State<BardenAddBook> {
                 BardenButton(
                   text: "ADD", 
                   onPressed: () {
-                    
+                    setState(() {
+                      _isLoading = true;
+                    });
+
+                    _azure.addNewBook(_isbnController.text, _yearController.text, _dropdownValue);
+
+                    setState(() {
+                      _isLoading = false;
+                    });
                   }, 
-                  isLoading: isLoading, 
+                  isLoading: _isLoading, 
                   width: 120
                 )
               ],

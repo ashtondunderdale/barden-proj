@@ -1,5 +1,5 @@
+import 'package:barden_book_project/home/services/azure.dart';
 import 'package:barden_book_project/login/models/login.dart';
-import 'package:barden_book_project/login/services/auth.dart';
 import 'package:barden_book_project/constants.dart';
 import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/common/barden_header.dart';
@@ -17,7 +17,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _auth = BardenAuth();
+  final _azure = AzureService();
   final _storage = const FlutterSecureStorage();
   
   final usernameController = TextEditingController();
@@ -157,20 +157,18 @@ class _LoginState extends State<Login> {
   void _tryLogin() async {
     setState(() => isWaitingForLoginResponse = true );
 
-    await Future.delayed(const Duration(seconds: 1)); // TODO: remove this for prod
-
     var auth = AuthModel(
       username: usernameController.text,
       password: passwordController.text
     );
 
-    var authSuccess = _auth.loginWithUsernameAndPassword(auth);
+    var authSuccess = await _azure.loginWithUsernameAndPassword(auth);
 
     setState(() => isWaitingForLoginResponse = false);
 
     if (!authSuccess) {
       setState(() {
-        authMessage = _auth.incorrectDetailsMessage;
+        authMessage = "Username or password is incorrect.";
         passwordController.clear();
       });
 

@@ -1,8 +1,6 @@
-import 'package:barden_book_project/home/services/blob.dart';
+import 'package:barden_book_project/home/services/azure.dart';
 import 'package:barden_book_project/home/widgets/add_book/add_book.dart';
 import 'package:barden_book_project/home/widgets/top_title_bar.dart';
-import 'package:barden_book_project/login/views/login.dart';
-import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
 import 'package:barden_book_project/home/widgets/inventory/inventory.dart';
 import '../../constants.dart';
@@ -18,7 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final _blob = BlobService();
+  final _azure = AzureService();
 
   String activeAction = "Inventory";
   Widget activeActionBarWidget = BardenInventory(books: books);
@@ -43,7 +41,7 @@ class _HomeState extends State<Home> {
             _showAddBook(context);
           },
           onUploadTap: () async {
-            _blob.getFiles();
+            _azure.getFiles();
           }
         ),
         Column(

@@ -1,10 +1,20 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 
-class BlobService {
+import '../../login/models/login.dart';
+
+class AzureService {
   final String storageAccountName = '';
   final String containerName = '';
   final String sasToken = '';
+
+  Future<bool> loginWithUsernameAndPassword(AuthModel auth) async {
+
+    // auth
+    
+    await Future.delayed(const Duration(seconds: 1));
+    return true;
+  }
 
   void getFiles() async {
     try {
@@ -20,13 +30,13 @@ class BlobService {
         await uploadFileToAzure(file, httpMessages);
       }
 
-      print("================RESPONSES================\n");
-      for (var response in httpMessages) {
-        print(response);
-      }
+      //print("================RESPONSES================\n");
+      //for (var response in httpMessages) {
+        //print(response);
+      //}s
 
     } catch (exception) {
-      print(exception);
+      //print(exception);
     }
   }
 
@@ -39,7 +49,7 @@ class BlobService {
         throw Exception("File bytes are null");
       }
 
-      final url = 'https://azureBlobUrl';
+      const url = "";
 
       final response = await http.put(Uri.parse(url),
         headers: {
@@ -59,7 +69,14 @@ class BlobService {
     }
   }
 
-  void addNewBook() {
+  Future<bool> addNewBook(String isbn, String year, String category) async {
 
+      // final response = http.put(Uri.parse(""),
+      //   headers: {},
+      //   body: jsonEncode({}),
+      // );
+    await Future.delayed(const Duration(seconds: 1));
+
+    return false;
   }
 }
