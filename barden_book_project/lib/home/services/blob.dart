@@ -1,6 +1,3 @@
-import 'dart:js_interop';
-
-import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 

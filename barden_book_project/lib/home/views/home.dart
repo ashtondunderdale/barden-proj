@@ -3,13 +3,10 @@ import 'package:barden_book_project/login/views/login.dart';
 import 'package:barden_book_project/login/widgets/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
 import 'package:barden_book_project/home/widgets/action_bar_pages/books.dart';
-import 'package:barden_book_project/home/widgets/action_bar_pages/dashboard.dart';
-import 'package:barden_book_project/home/widgets/action_bar_pages/manage.dart';
-import 'package:barden_book_project/home/widgets/action_bar_pages/settings.dart';
+import 'package:barden_book_project/home/widgets/action_bar_pages/inventory.dart';
 import '../../constants.dart';
 
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,8 +18,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _blob = BlobService();
 
-  String activeAction = "Dashboard";
-  Widget activeActionBarWidget = const BardenDashboard();
+  String activeAction = "Inventory";
+  Widget activeActionBarWidget = BardenInventory();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -34,27 +31,15 @@ class _HomeState extends State<Home> {
           activeAction: activeAction,
           onDashboardTap: () {
             setState(() {
-              activeAction = "Dashboard";
-              activeActionBarWidget = const BardenDashboard();
+              activeAction = "Inventory";
+              activeActionBarWidget = BardenInventory();
             });       
-          },
-          onManageTap: () {
-            setState(() {
-              activeAction = "Manage";
-              activeActionBarWidget = const BardenManage();
-            });        
           },
           onBooksTap: () {
             setState(() {
               activeAction = "Books";
               activeActionBarWidget = const BardenBooks();
             });        
-          },
-          onSettingsTap: () {
-            setState(() {
-              activeAction = "Settings";
-              activeActionBarWidget = const BardenSettings();
-            });       
           },
           onUploadTap: () async {
             _blob.getFiles();
@@ -95,7 +80,7 @@ class _HomeState extends State<Home> {
                 width: MediaQuery.sizeOf(context).width * 0.9,
                 height: MediaQuery.sizeOf(context).height * 0.8,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 235, 235, 235),
+                  //color: const Color.fromARGB(255, 235, 235, 235),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: const Color.fromARGB(255, 217, 217, 217))
                 ),

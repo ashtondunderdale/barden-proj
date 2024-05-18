@@ -5,16 +5,12 @@ class BardenActionBar extends StatelessWidget {
   BardenActionBar({super.key, 
     required this.activeAction, 
     required this.onDashboardTap, 
-    required this.onManageTap, 
     required this.onBooksTap, 
-    required this.onSettingsTap,
     required this.onUploadTap
   });
 
   final VoidCallback onDashboardTap;
-  final VoidCallback onManageTap;
   final VoidCallback onBooksTap;
-  final VoidCallback onSettingsTap;
   final VoidCallback onUploadTap;
 
   String activeAction;
@@ -29,28 +25,16 @@ class BardenActionBar extends StatelessWidget {
     child: Column(
       children: [
         _ActionItem(
-          text: "Dashboard",
+          text: "Inventory",
           icon: Icons.dashboard,
           onTap: onDashboardTap,
           isActive: activeAction == "Dashboard",
-        ),
-        _ActionItem(
-          text: "Manage",
-          icon: Icons.manage_history,
-          onTap: onManageTap,
-          isActive: activeAction == "Manage"
         ),
         _ActionItem(
           text: "Books",
           icon: Icons.book,
           onTap: onBooksTap,
           isActive: activeAction == "Books"
-        ),
-        _ActionItem(
-          text: "Settings",
-          icon: Icons.settings,
-          onTap: onSettingsTap,
-          isActive: activeAction == "Settings"
         ),
         const Spacer(),
         _ActionItem(
