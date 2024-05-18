@@ -14,7 +14,7 @@ class TopTitleBar extends StatelessWidget {
     return Row(
       children: [
         SizedBox(
-          width: MediaQuery.sizeOf(context).width * 0.85,
+          width: MediaQuery.sizeOf(context).width - 200,
           child: Padding(
             padding: const EdgeInsets.only(left: 32, top: 16),
             child: Row(

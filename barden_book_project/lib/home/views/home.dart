@@ -51,8 +51,8 @@ class _HomeState extends State<Home> {
             Padding(
               padding: const EdgeInsets.only(left: 32, top: 32),
               child: SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.9,
-                height: MediaQuery.sizeOf(context).height * 0.8,
+                width: MediaQuery.sizeOf(context).width  - 120,
+                height: MediaQuery.sizeOf(context).height - 100,
                 child: activeActionBarWidget,
               ),
             ),
