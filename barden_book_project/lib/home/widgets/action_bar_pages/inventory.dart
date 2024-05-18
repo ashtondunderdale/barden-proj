@@ -1,3 +1,4 @@
+import 'package:barden_book_project/constants.dart';
 import 'package:barden_book_project/home/models/book.dart';
 import 'package:flutter/material.dart';
 
@@ -94,15 +95,30 @@ class BardenInventory extends StatelessWidget {
 
 void _showMyDialog(BuildContext context, Book book) async => showDialog<void>(
   context: context,
-  builder: (BuildContext context) => Container(
-    width: 400,
-    height: 200,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Text(
-      book.title
+  builder: (BuildContext context) => Center(
+    child: Container(
+      width: MediaQuery.sizeOf(context).width * 0.6,
+      height: MediaQuery.sizeOf(context).height * 0.6,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              book.title,
+              style: primaryFont.copyWith(
+                fontSize: 32,
+                color: Colors.grey,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   )
 );

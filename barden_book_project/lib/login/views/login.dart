@@ -115,7 +115,11 @@ class _LoginState extends State<Login> {
               onChanged: (_) {
                 setState(() { 
                   rememberMe = !rememberMe;
-                  _deleteSavedLoginDetails(); 
+                  if (rememberMe) {
+                    _saveLoginDetails();
+                  } else {
+                    _deleteSavedLoginDetails(); 
+                  }
                 });
               }),
               Text(
@@ -174,7 +178,7 @@ class _LoginState extends State<Login> {
     }
 
     if (rememberMe) {
-      _loadSavedLoginDetails();
+      _saveLoginDetails();
     } else {
       _deleteSavedLoginDetails();
     }
@@ -183,7 +187,7 @@ class _LoginState extends State<Login> {
         MaterialPageRoute(builder: (context) => const Home()));
   }
 
-  void _loadSavedLoginDetails() async {
+  void _saveLoginDetails() async {
     await _storage.write(key: 'password', value: passwordController.text);
     await _storage.write(key: 'username', value: usernameController.text);
   }
