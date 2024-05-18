@@ -11,8 +11,10 @@ class BardenField extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox(
     width: width, height: 30,
-    child: const TextField(
-      
+    child: TextField(
+      decoration: InputDecoration(
+        hintText: fieldName
+      ),
     ),
   );
 }
