@@ -20,7 +20,6 @@ class BardenInventory extends StatefulWidget {
 
 class _BardenInventoryState extends State<BardenInventory> {
   bool isHovering = false;
-  final _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(

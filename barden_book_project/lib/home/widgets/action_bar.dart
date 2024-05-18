@@ -28,7 +28,7 @@ class BardenActionBar extends StatelessWidget {
           text: "Inventory",
           icon: Icons.dashboard,
           onTap: onDashboardTap,
-          isActive: activeAction == "Dashboard",
+          isActive: activeAction == "Inventory",
         ),
         _ActionItem(
           text: "Add Book",

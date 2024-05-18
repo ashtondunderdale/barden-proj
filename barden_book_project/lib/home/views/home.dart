@@ -1,5 +1,5 @@
 import 'package:barden_book_project/home/services/blob.dart';
-import 'package:barden_book_project/home/widgets/add_book.dart';
+import 'package:barden_book_project/home/widgets/add_book/add_book.dart';
 import 'package:barden_book_project/login/views/login.dart';
 import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
@@ -45,10 +45,7 @@ class _HomeState extends State<Home> {
             });       
           },
           addBookTap: () {
-            setState(() {
-              activeAction = "Add Book";
-              _showBookDetails(context);
-            });        
+            _showBookDetails(context);
           },
           onUploadTap: () async {
             _blob.getFiles();
