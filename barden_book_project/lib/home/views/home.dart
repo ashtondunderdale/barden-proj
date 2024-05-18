@@ -1,5 +1,6 @@
 import 'package:barden_book_project/home/services/blob.dart';
 import 'package:barden_book_project/home/widgets/add_book/add_book.dart';
+import 'package:barden_book_project/home/widgets/top_title_bar.dart';
 import 'package:barden_book_project/login/views/login.dart';
 import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
@@ -25,12 +26,6 @@ class _HomeState extends State<Home> {
   String activeCategory = "";
 
   @override
-  void initState() {
-    super.initState();
-    activeCategory = readingCategories.first;
-  }
-
-  @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: Colors.white,
     body: Row(
@@ -45,7 +40,7 @@ class _HomeState extends State<Home> {
             });       
           },
           addBookTap: () {
-            _showBookDetails(context);
+            _showAddBook(context);
           },
           onUploadTap: () async {
             _blob.getFiles();
@@ -54,36 +49,7 @@ class _HomeState extends State<Home> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.85,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 32, top: 16),
-                    child: Row(
-                      children: [
-                        Text(
-                          activeAction,
-                          style: primaryFont.copyWith(
-                            color: const Color.fromARGB(255, 58, 58, 58),
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                BardenButton(
-                  width: 100,
-                  text: "LOGOUT", 
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
-                  }, 
-                  isLoading: false
-                )
-              ],
-            ),
+            TopTitleBar(activeAction: activeAction),
             Padding(
               padding: const EdgeInsets.only(left: 32, top: 32),
               child: SizedBox(
@@ -98,14 +64,12 @@ class _HomeState extends State<Home> {
     ),
   );
 
-  void _showBookDetails(BuildContext context) async => showDialog<void>(
+  void _showAddBook(BuildContext context) async => showDialog<void>(
     context: context,
     builder: (BuildContext context) => BardenAddBook(
-      dropdownValue: activeCategory, 
       onCategoryChanged: (val) {
         setState(() {
           activeCategory = val;
-          print(activeCategory);
         });
       }
     )

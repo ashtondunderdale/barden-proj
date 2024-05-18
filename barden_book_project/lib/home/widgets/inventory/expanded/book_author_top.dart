@@ -1,3 +1,4 @@
+import 'package:barden_book_project/common/barden_close_icon.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../constants.dart';
@@ -44,22 +45,10 @@ class BookAuthorTop extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(
-                  Icons.close,
-                  color: bardenPurple,
-                  size: 20,
-                ),
-              ),
-            ),
-          )
+          const Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: BardenCloseIcon(),
+          ),
         ],
       ),
     ),

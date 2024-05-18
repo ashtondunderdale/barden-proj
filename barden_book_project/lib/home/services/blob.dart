@@ -58,4 +58,8 @@ class BlobService {
       return false;
     }
   }
+
+  void addNewBook() {
+
+  }
 }
