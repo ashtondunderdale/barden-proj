@@ -3,6 +3,7 @@ import 'package:barden_book_project/constants.dart';
 import 'package:barden_book_project/home/models/book.dart';
 import 'package:barden_book_project/home/widgets/inventory/book_item.dart';
 import 'package:barden_book_project/common/barden_button.dart';
+import 'package:barden_book_project/home/widgets/inventory/expanded/book_author_top.dart';
 import 'package:flutter/material.dart';
 
 
@@ -102,45 +103,10 @@ class _BardenInventoryState extends State<BardenInventory> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 40,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Text(
-                          book.title,
-                          style: primaryFont.copyWith(
-                            fontSize: 32,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ),
-                      Text(
-                        book.author,
-                        style: primaryFont.copyWith(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // Row(
-              //   children: [
-              //     BardenField(
-              //       width: 100, 
-              //       fieldName: "No. Available", 
-              //       onFieldChanged: () {
-      
-              //       })
-              //   ],
-              // ),
+              BookAuthorTop(book: book),
+
+              // more content here
+
               const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
