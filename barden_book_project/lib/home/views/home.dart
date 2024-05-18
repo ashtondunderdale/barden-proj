@@ -1,9 +1,9 @@
 import 'package:barden_book_project/home/services/blob.dart';
 import 'package:barden_book_project/login/views/login.dart';
-import 'package:barden_book_project/login/widgets/barden_button.dart';
+import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
-import 'package:barden_book_project/home/widgets/action_bar_pages/books.dart';
-import 'package:barden_book_project/home/widgets/action_bar_pages/inventory.dart';
+import 'package:barden_book_project/home/widgets/books.dart';
+import 'package:barden_book_project/home/widgets/inventory/inventory.dart';
 import '../../constants.dart';
 
 import 'package:flutter/material.dart';
@@ -76,14 +76,9 @@ class _HomeState extends State<Home> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 32, top: 32),
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.9,
                 height: MediaQuery.sizeOf(context).height * 0.8,
-                decoration: BoxDecoration(
-                  //color: const Color.fromARGB(255, 235, 235, 235),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color.fromARGB(255, 217, 217, 217))
-                ),
                 child: activeActionBarWidget,
               ),
             ),

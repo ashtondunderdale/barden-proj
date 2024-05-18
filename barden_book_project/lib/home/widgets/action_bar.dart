@@ -81,8 +81,7 @@ class __ActionItemState extends State<_ActionItem> {
           child: Tooltip(
             message: widget.text,
             child: Container(
-              width: 80,
-              height: 40,
+              width: 80, height: 40,
               decoration: BoxDecoration(
                 border: widget.isActive ? const Border(right: BorderSide(color: Colors.white, width: 4)) : null
               ),

@@ -1,9 +1,9 @@
 import 'package:barden_book_project/login/models/login.dart';
 import 'package:barden_book_project/login/services/auth.dart';
 import 'package:barden_book_project/constants.dart';
-import 'package:barden_book_project/login/widgets/barden_button.dart';
-import 'package:barden_book_project/login/widgets/barden_header.dart';
-import 'package:barden_book_project/login/widgets/barden_textfield.dart';
+import 'package:barden_book_project/common/barden_button.dart';
+import 'package:barden_book_project/common/barden_header.dart';
+import 'package:barden_book_project/common/barden_textfield.dart';
 import 'package:barden_book_project/home/views/home.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

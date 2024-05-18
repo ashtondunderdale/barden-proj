@@ -1,11 +1,18 @@
 import 'package:barden_book_project/constants.dart';
 import 'package:barden_book_project/home/models/book.dart';
+import 'package:barden_book_project/home/widgets/inventory/book_item.dart';
+import 'package:barden_book_project/common/barden_button.dart';
 import 'package:flutter/material.dart';
 
 
-class BardenInventory extends StatelessWidget {
-  BardenInventory({super.key});
+class BardenInventory extends StatefulWidget {
+  const BardenInventory({super.key});
 
+  @override
+  State<BardenInventory> createState() => _BardenInventoryState();
+}
+
+class _BardenInventoryState extends State<BardenInventory> {
   final List<Book> books = [
     Book(title: "title 1", author: "author 1", 
     numberAvailable: 1, isbn: "32-4342-3-423", 
@@ -45,6 +52,8 @@ class BardenInventory extends StatelessWidget {
     level: ReadingLevel.beginner, publicationYear: "2022"),
   ];
 
+  bool isHovering = false;
+
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
     scrollDirection: Axis.vertical,
@@ -58,67 +67,66 @@ class BardenInventory extends StatelessWidget {
       ],
     ),
   );
-  
 
   Widget _buildBookList(List<Book> books) => Padding(
     padding: const EdgeInsets.all(8.0),
     child: SizedBox(
-      height: 200,
+      height: 240,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: books.length,
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _buildBookItem(context, index, books[index])
+          child: BookItem(book: books[index], onBookTap: () {
+            _showBookDetails(context, books[index]);
+          })
         ),
       ),
     ),
   );
 
-  Widget _buildBookItem(BuildContext context, int index, Book book) => GestureDetector(
-    onTap: () {
-      _showMyDialog(context, book);
-    },
-    child: Container(
-      width: 160,
-      height: 300,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey)
-      ),
-      child: Text(
-        book.title
-      )
-    ),
-  );
-}
-
-void _showMyDialog(BuildContext context, Book book) async => showDialog<void>(
-  context: context,
-  builder: (BuildContext context) => Center(
-    child: Container(
-      width: MediaQuery.sizeOf(context).width * 0.6,
-      height: MediaQuery.sizeOf(context).height * 0.6,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              book.title,
-              style: primaryFont.copyWith(
-                fontSize: 32,
-                color: Colors.grey,
-                fontWeight: FontWeight.bold
+  void _showBookDetails(BuildContext context, Book book) async => showDialog<void>(
+    context: context,
+    builder: (BuildContext context) => Center(
+      child: Container(
+        width: MediaQuery.sizeOf(context).width * 0.6,
+        height: MediaQuery.sizeOf(context).height * 0.6,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                book.title,
+                style: primaryFont.copyWith(
+                  fontSize: 32,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold
+                ),
               ),
             ),
-          ),
-        ],
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                BardenButton(
+                  text: "SAVE", 
+                  onPressed: () {
+
+                  }, 
+                  isLoading: false, 
+                  width: 120
+                )
+              ],
+            )
+          ],
+        ),
       ),
-    ),
-  )
-);
+    )
+  );
+}
