@@ -8,13 +8,16 @@ class Book {
   String publicationYear;
   ReadingLevel level;
 
+  bool isVisible; // for search
+
   Book({
     required this.title, 
     required this.author, 
     required this.numberAvailable,
     required this.isbn,
     required this.level,
-    required this.publicationYear
+    required this.publicationYear,
+    required this.isVisible
   });
 }
 

@@ -1,12 +1,13 @@
 import 'package:barden_book_project/home/services/blob.dart';
+import 'package:barden_book_project/home/widgets/add_book.dart';
 import 'package:barden_book_project/login/views/login.dart';
 import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
-import 'package:barden_book_project/home/widgets/books.dart';
 import 'package:barden_book_project/home/widgets/inventory/inventory.dart';
 import '../../constants.dart';
 
 import 'package:flutter/material.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,7 +20,15 @@ class _HomeState extends State<Home> {
   final _blob = BlobService();
 
   String activeAction = "Inventory";
-  Widget activeActionBarWidget = BardenInventory();
+  Widget activeActionBarWidget = BardenInventory(books: books);
+
+  String activeCategory = "";
+
+  @override
+  void initState() {
+    super.initState();
+    activeCategory = readingCategories.first;
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -32,13 +41,13 @@ class _HomeState extends State<Home> {
           onDashboardTap: () {
             setState(() {
               activeAction = "Inventory";
-              activeActionBarWidget = BardenInventory();
+              activeActionBarWidget = BardenInventory(books: books);
             });       
           },
-          onBooksTap: () {
+          addBookTap: () {
             setState(() {
-              activeAction = "Books";
-              activeActionBarWidget = const BardenBooks();
+              activeAction = "Add Book";
+              _showBookDetails(context);
             });        
           },
           onUploadTap: () async {
@@ -54,13 +63,17 @@ class _HomeState extends State<Home> {
                   width: MediaQuery.sizeOf(context).width * 0.85,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 32, top: 16),
-                    child: Text(
-                      activeAction,
-                      style: primaryFont.copyWith(
-                        color: const Color.fromARGB(255, 36, 36, 36),
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          activeAction,
+                          style: primaryFont.copyWith(
+                            color: const Color.fromARGB(255, 58, 58, 58),
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -87,4 +100,18 @@ class _HomeState extends State<Home> {
       ],
     ),
   );
+
+  void _showBookDetails(BuildContext context) async => showDialog<void>(
+    context: context,
+    builder: (BuildContext context) => BardenAddBook(
+      dropdownValue: activeCategory, 
+      onCategoryChanged: (val) {
+        setState(() {
+          activeCategory = val;
+          print(activeCategory);
+        });
+      }
+    )
+  );
 }
+

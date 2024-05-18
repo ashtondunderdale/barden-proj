@@ -1,3 +1,4 @@
+import 'package:barden_book_project/constants.dart';
 import 'package:flutter/material.dart';
 
 class BardenField extends StatelessWidget {
@@ -9,11 +10,24 @@ class BardenField extends StatelessWidget {
   final VoidCallback onFieldChanged;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    width: width, height: 30,
-    child: TextField(
-      decoration: InputDecoration(
-        hintText: fieldName
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      width: width, height: 30,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(4)
+      ),
+      child: TextField(
+        style: primaryFont.copyWith(
+          color: Colors.grey,
+          fontSize: 12
+        ),
+        decoration: InputDecoration(    
+          contentPadding: const EdgeInsets.all(13.0),
+          hintText: fieldName,
+          border: InputBorder.none,
+        ),
       ),
     ),
   );

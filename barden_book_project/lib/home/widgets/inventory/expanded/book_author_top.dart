@@ -31,11 +31,14 @@ class BookAuthorTop extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  book.author,
-                  style: primaryFont.copyWith(
-                    fontSize: 16,
-                    color: Colors.grey,
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(
+                    book.author,
+                    style: primaryFont.copyWith(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ],

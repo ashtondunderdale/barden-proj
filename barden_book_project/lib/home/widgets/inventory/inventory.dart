@@ -6,66 +6,32 @@ import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/inventory/expanded/book_author_top.dart';
 import 'package:flutter/material.dart';
 
+import 'book_search_bar.dart';
+
 
 class BardenInventory extends StatefulWidget {
-  const BardenInventory({super.key});
+  const BardenInventory({super.key, required this.books});
+
+  final List<Book> books;
 
   @override
   State<BardenInventory> createState() => _BardenInventoryState();
 }
 
 class _BardenInventoryState extends State<BardenInventory> {
-  final List<Book> books = [
-    Book(title: "Animal Farm", author: "George Orwell", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 2", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 3", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 4", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 5", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 6", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 7", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 8", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 9", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 10", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 11", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-    Book(title: "title 12", author: "author 1", 
-    numberAvailable: 1, isbn: "32-4342-3-423", 
-    level: ReadingLevel.beginner, publicationYear: "2022"),
-  ];
-
   bool isHovering = false;
+  final _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
     scrollDirection: Axis.vertical,
     child: Column(
       children: [
-        _buildBookList(books),
-        _buildBookList(books),
-        _buildBookList(books),
-        _buildBookList(books),
-        _buildBookList(books),
+        _buildBookList(widget.books),
+        _buildBookList(widget.books),
+        _buildBookList(widget.books),
+        _buildBookList(widget.books),
+        _buildBookList(widget.books),
       ],
     ),
   );
@@ -80,9 +46,9 @@ class _BardenInventoryState extends State<BardenInventory> {
         itemCount: books.length,
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.all(8.0),
-          child: BookItem(book: books[index], onBookTap: () {
+          child: books[index].isVisible ? BookItem(book: books[index], onBookTap: () {
             _showBookDetails(context, books[index]);
-          })
+          }) : const SizedBox(),
         ),
       ),
     ),
