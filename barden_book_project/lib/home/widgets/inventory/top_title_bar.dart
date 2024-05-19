@@ -1,13 +1,16 @@
+import 'package:barden_book_project/common/barden_dropdown.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/barden_button.dart';
-import '../../constants.dart';
-import '../../login/views/login.dart';
+import '../../../common/barden_button.dart';
+import '../../../constants.dart';
+import '../../../login/views/login.dart';
 
-class TopTitleBar extends StatelessWidget {
-  const TopTitleBar({super.key, required this.activeAction});
+class InventoryTitleBar extends StatelessWidget {
+  const InventoryTitleBar({super.key, required this.activeAction, required this.onReadingCategorySelected, required this.onReadingYearSelected});
 
   final String activeAction;
+  final Function(String) onReadingCategorySelected;
+  final Function(String) onReadingYearSelected;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -26,6 +29,12 @@ class TopTitleBar extends StatelessWidget {
                   fontWeight: FontWeight.bold
                 ),
               ),
+              BardenDropdown(items: readingCategories, onItemSelected: (item) {
+                onReadingCategorySelected(item);
+              }), 
+              BardenDropdown(items: readingYears, onItemSelected: (item) {
+                onReadingYearSelected(item);
+              }), 
             ],
           ),
         ),

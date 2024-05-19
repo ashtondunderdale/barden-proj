@@ -14,3 +14,4 @@ var defaultBoxShadow = BoxShadow(
 );
 
 List<String> readingCategories = ["Reading Challenge", "Class Novel", "Topic Book", "Library Book"];
+List<String> readingYears = ["EYFS", "1", "2", "3", "4", "5", "6"];

@@ -5,7 +5,7 @@ import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/inventory/expanded/book_author_top.dart';
 import 'package:flutter/material.dart';
 
-import '../top_title_bar.dart';
+import 'top_title_bar.dart';
 
 
 class BardenInventory extends StatefulWidget {
@@ -26,56 +26,73 @@ class _BardenInventoryState extends State<BardenInventory> {
       scrollDirection: Axis.vertical,
       child: Column(
         children: [
-          const TopTitleBar(activeAction: "Inventory"),
+          InventoryTitleBar(activeAction: "Inventory", onReadingCategorySelected: (selectedCategory) {
+            for (var book in widget.books) {
+              if (book.category == selectedCategory) {
+                  book.isVisible = true;
+              } else {
+                book.isVisible = false;
+              }
+
+              setState(() {});
+            }
+          }, 
+          onReadingYearSelected: (selectedYear) {
+            for (var book in widget.books) {
+              if (book.readingYear == selectedYear) {
+                  book.isVisible = true;
+              } else {
+                book.isVisible = false;
+              }
+
+              setState(() {});
+            }
+          }),
           ...{
-            "EYFS": "EYFS",
-            "1": "Year 1",
-            "2": "Year 2",
-            "3": "Year 3",
-            "4": "Year 4",
-            "5": "Year 5",
-            "6": "Year 6",
-          }.entries.map((entry) => Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _buildBookList(
-              widget.books.where((book) => book.readingYear == entry.key).toList(),
-              entry.value,
-            ),
+            "EYFS": "EYFS", 
+            "1": "Year 1", "2": "Year 2", "3": "Year 3",
+            "4": "Year 4","5": "Year 5", "6": "Year 6",
+          }.entries.map((entry) => _buildBookList(
+            widget.books.where((book) => book.readingYear == entry.key).toList(),
+            entry.value,
           ))
         ],
       ),
     );
   }
 
-  Widget _buildBookList(List<Book> books, String title) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        title,
-        style: primaryFont.copyWith(
-          color: Colors.grey,
-          fontWeight: FontWeight.bold,
-          fontSize: 48
+  Widget _buildBookList(List<Book> books, String title) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: primaryFont.copyWith(
+            color: Colors.grey,
+            fontWeight: FontWeight.bold,
+            fontSize: 48
+          ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          height: 240,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: books.length,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: books[index].isVisible ? BookItem(book: books[index], onBookTap: () {
-                _showBookDetails(context, books[index]);
-              }) : const SizedBox(),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 240,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: books.length,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: books[index].isVisible ? BookItem(book: books[index], onBookTap: () {
+                  _showBookDetails(context, books[index]);
+                }) : const SizedBox(),
+              ),
             ),
           ),
         ),
-      ),
-    ],
+      ],
+    ),
   );
 
   void _showBookDetails(BuildContext context, Book book) async => showDialog<void>(

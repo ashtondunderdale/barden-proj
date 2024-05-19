@@ -1,6 +1,6 @@
 import 'package:barden_book_project/home/services/azure.dart';
 import 'package:barden_book_project/home/widgets/add_book/add_book.dart';
-import 'package:barden_book_project/home/widgets/action_bar.dart';
+import 'package:barden_book_project/home/widgets/home/action_bar.dart';
 import 'package:barden_book_project/home/widgets/inventory/inventory.dart';
 import '../models/book.dart';
 
