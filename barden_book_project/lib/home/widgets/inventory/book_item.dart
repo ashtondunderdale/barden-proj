@@ -33,23 +33,27 @@ class _BookItemState extends State<BookItem> {
           duration: const Duration(milliseconds: 200),
           transform: Matrix4.identity().scaled(isHovering ? 1.05 : 1),
           transformAlignment: Alignment.center,
-          width: 160, height: 300,
+          width: 160, height: 340,
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(4),
+            border: widget.book.coverUrl != "Unknown" ? Border.all(color: Colors.grey) : null,
+            borderRadius: widget.book.coverUrl != "Unknown" ? BorderRadius.circular(4) : null,
             boxShadow: [
-              BoxShadow(
+              widget.book.coverUrl != "Unknown" ? BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 1,
                 blurRadius: 3,
                 offset: const Offset(0, 0),
-              )
+              ) : const BoxShadow()
             ],
           ),
-          child: Image.network(
+          child: widget.book.coverUrl != "Unknown" ? Image.network(
             widget.book.coverUrl,
-            fit: BoxFit.fitHeight,
+            fit: BoxFit.cover,
+          ) : const Icon(
+            Icons.image_not_supported,
+            color: Colors.grey,
+            size: 48,
           ),
         ),
       ),
