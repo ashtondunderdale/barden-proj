@@ -29,31 +29,28 @@ class _BardenInventoryState extends State<BardenInventory> {
       scrollDirection: Axis.vertical,
       child: Column(
         children: [
-          InventoryTitleBar(activeAction: "Inventory", onReadingCategorySelected: (selectedCategory) {
-            for (var book in widget.books) {
-              selectedCategoryTag = selectedCategory;
-              
-              if (book.category == selectedCategory) {
-                book.isVisible = true;
-              } else {
-                book.isVisible = false;
-              }
-            }
-
+          InventoryTitleBar(
+          activeAction: "Inventory", 
+          onReadingCategorySelected: (selectedCategory) {
+            selectedCategoryTag = selectedCategory;
+            _updateBookVisibility();
             setState(() {});
-          }, 
+          },
           onReadingYearSelected: (selectedYear) {
-            selectedYearTag = selectedYear;
-
+            setState(() {
+              selectedYearTag = selectedYear;
+              _updateBookVisibility();
+            });
+          },
+          onFiltersCleared: () 
+          {  
             for (var book in widget.books) {
-              if (book.readingYear == selectedYear) {
+              setState(() {
                 book.isVisible = true;
-              } else {
-                book.isVisible = false;
-              }
+                selectedCategoryTag = "none";
+                selectedYearTag = "none";
+              });
             }
-
-            setState(() {});
           }),
           if (selectedCategoryTag != "none" && selectedYearTag == "none")
             _buildBookList(
@@ -74,20 +71,36 @@ class _BardenInventoryState extends State<BardenInventory> {
     );
   }
 
+  void _updateBookVisibility() {
+    for (var book in widget.books) {
+      bool isVisible = true;
+      if (selectedCategoryTag != "none" && book.category != selectedCategoryTag) {
+        isVisible = false;
+      }
+      if (selectedYearTag != "none" && book.readingYear != selectedYearTag) {
+        isVisible = false;
+      }
+      book.isVisible = isVisible;
+    }
+  }
+
   Widget _buildBookList(List<Book> books, String title, bool hidden) => !hidden ? Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          selectedYearTag != "none" && selectedCategoryTag != "none" ? selectedYearTag == "EYFS" ? "$selectedCategoryTag $selectedYearTag" : "$selectedCategoryTag Year $selectedYearTag"
-            : selectedYearTag == "none" && selectedCategoryTag != "none" ? selectedCategoryTag
-            : selectedCategoryTag == "none" && selectedYearTag != "none" ? selectedYearTag == "EYFS" ? "EYFS" : "Year $selectedYearTag"
-            : title,
-          style: primaryFont.copyWith(
-            color: Colors.grey,
-            fontWeight: FontWeight.bold,
-            fontSize: 48
+        Padding(
+          padding: const EdgeInsets.only(left: 48),
+          child: Text(
+            selectedYearTag != "none" && selectedCategoryTag != "none" ? selectedYearTag == "EYFS" ? "$selectedCategoryTag $selectedYearTag" : "$selectedCategoryTag Year $selectedYearTag"
+              : selectedYearTag == "none" && selectedCategoryTag != "none" ? selectedCategoryTag
+              : selectedCategoryTag == "none" && selectedYearTag != "none" ? selectedYearTag == "EYFS" ? "EYFS" : "Year $selectedYearTag"
+              : title,
+            style: primaryFont.copyWith(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              fontSize: 48
+            ),
           ),
         ),
         Padding(

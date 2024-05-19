@@ -45,9 +45,13 @@ class BookAuthorTop extends StatelessWidget {
               ],
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(bottom: 20),
-            child: BardenCloseIcon(),
+            child: BardenIconButton(onPressed: () => Navigator.pop(context), icon: Icon(
+              Icons.close,
+              color: bardenPurple,
+              size: 20,
+            )),
           ),
         ],
       ),

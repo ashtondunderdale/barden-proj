@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
 
-class BardenCloseIcon extends StatelessWidget {
-  const BardenCloseIcon({super.key});
+class BardenIconButton extends StatelessWidget {
+  const BardenIconButton({super.key, required this.icon, required this.onPressed});
+
+  final Icon icon;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -11,13 +13,9 @@ class BardenCloseIcon extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          Navigator.pop(context);
+          onPressed();
         },
-        child: Icon(
-          Icons.close,
-          color: bardenPurple,
-          size: 20,
-        ),
+        child: icon,
       ),
     );
   }

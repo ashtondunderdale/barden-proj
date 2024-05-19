@@ -38,12 +38,16 @@ class _BardenAddBookState extends State<BardenAddBook> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Row(
+            Row(
               children: [
-                Spacer(),
+                const Spacer(),
                 Padding(
-                  padding: EdgeInsets.only(right: 8, top: 8),
-                  child: BardenCloseIcon(),
+                  padding: const EdgeInsets.only(right: 8, top: 8),
+                  child: BardenIconButton(onPressed: () => Navigator.pop(context), icon: Icon(
+                    Icons.close,
+                    color: bardenPurple,
+                    size: 20,
+                  )),
                 ),
               ],
             ),

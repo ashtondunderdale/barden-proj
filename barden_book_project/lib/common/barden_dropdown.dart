@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import '../constants.dart';
 
 class BardenDropdown extends StatefulWidget {
-  const BardenDropdown({
+  BardenDropdown({
     super.key,
     required this.items,
     required this.onItemSelected,
@@ -17,12 +16,12 @@ class BardenDropdown extends StatefulWidget {
 }
 
 class _BardenDropdownState extends State<BardenDropdown> {
-  String? _selectedItem;
+  String? _selectedItem = "";
 
   @override
   void initState() {
     super.initState();
-    _selectedItem = widget.items.isNotEmpty ? widget.items[0] : null;
+    _selectedItem = null;
   }
 
   @override
@@ -40,13 +39,13 @@ class _BardenDropdownState extends State<BardenDropdown> {
         child: DropdownButton<String>(
           value: _selectedItem,
           items: widget.items.map<DropdownMenuItem<String>>((String item) => DropdownMenuItem<String>(
-              value: item,
-              child: Text(item, style: primaryFont.copyWith(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold)),
-            )).toList(),
-          onChanged: (String? newValue) => setState(() {
+            value: item,
+            child: Text(item, style: primaryFont.copyWith(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold)),
+          )).toList(),
+          onChanged: (String? newValue) {
             _selectedItem = newValue;
-            widget.onItemSelected(_selectedItem!);
-          }),
+            widget.onItemSelected(newValue!);
+          },
           dropdownColor: Colors.white,
           icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
           style: primaryFont.copyWith(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
