@@ -1,13 +1,13 @@
 import 'package:barden_book_project/home/services/azure.dart';
 import 'package:barden_book_project/home/widgets/add_book/add_book.dart';
-import 'package:barden_book_project/home/widgets/top_title_bar.dart';
 import 'package:barden_book_project/home/widgets/action_bar.dart';
 import 'package:barden_book_project/home/widgets/inventory/inventory.dart';
-import '../../constants.dart';
+import '../models/book.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'dart:async';
 
-import '../models/book.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -26,17 +26,30 @@ class _HomeState extends State<Home> {
   List<Book> books = [];
   bool _isLoading = true;
 
+  Color _currentColor = const Color.fromARGB(255, 203, 203, 203);
+  
   @override
   void initState() {
     initializeBooks();
+    _startColorToggle();
     super.initState();
   }
 
   void initializeBooks() async {
     books = await _azure.getBooks() ?? [];
     setState(() {
-      //_isLoading = false;
+      _isLoading = false;
       activeActionBarWidget = BardenInventory(books: books);    
+    });
+  }
+
+  void _startColorToggle() {
+    Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      setState(() {
+        _currentColor = _currentColor == const Color.fromARGB(255, 203, 203, 203)
+            ? const Color.fromARGB(255, 230, 230, 230)
+            : const Color.fromARGB(255, 203, 203, 203);
+      });
     });
   }
 
@@ -77,25 +90,37 @@ class _HomeState extends State<Home> {
     ),
   );
 
-Widget _buildLoadingPlaceholder() {
-  return ListView.builder(
-    itemCount: 7,
-    itemBuilder: (context, rowIndex) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(8, (boxIndex) =>
-          Container(
-            width: 160, height: 240,
-            color: Colors.grey,
+  Widget _buildLoadingPlaceholder() => Padding(
+    padding: const EdgeInsets.only(top: 88, left: 12),
+    child: ListView.builder(
+      itemCount: 7,
+      itemBuilder: (context, rowIndex) => Padding(
+        padding: const EdgeInsets.only(top: 78, left: 14, right: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(8, (boxIndex) =>
+            AnimatedContainer(
+              width: 160, height: 240,
+              decoration: BoxDecoration(
+                color: _currentColor,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              duration: const Duration(seconds: 1),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SpinKitThreeInOut(
+                    size: 20,
+                    color: Color.fromARGB(255, 231, 231, 231),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     ),
   );
-}
-
-  
 
   void _showAddBook(BuildContext context) async => showDialog<void>(
     context: context,
