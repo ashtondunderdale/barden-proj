@@ -16,8 +16,9 @@ class _BookItemState extends State<BookItem> {
   bool isHovering = false;
 
   @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) {
         setState(() => isHovering = true );
@@ -57,6 +58,7 @@ class _BookItemState extends State<BookItem> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
+

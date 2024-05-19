@@ -20,6 +20,9 @@ class BardenInventory extends StatefulWidget {
 class _BardenInventoryState extends State<BardenInventory> {
   bool isHovering = false;
 
+  String selectedYearTag = "none";
+  String selectedCategoryTag = "none";
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -28,46 +31,61 @@ class _BardenInventoryState extends State<BardenInventory> {
         children: [
           InventoryTitleBar(activeAction: "Inventory", onReadingCategorySelected: (selectedCategory) {
             for (var book in widget.books) {
+              selectedCategoryTag = selectedCategory;
+
               if (book.category == selectedCategory) {
                   book.isVisible = true;
               } else {
                 book.isVisible = false;
               }
-
-              setState(() {});
             }
+
+            setState(() {});
           }, 
           onReadingYearSelected: (selectedYear) {
+            selectedYearTag = selectedYear;
+
             for (var book in widget.books) {
               if (book.readingYear == selectedYear) {
                   book.isVisible = true;
               } else {
                 book.isVisible = false;
               }
-
-              setState(() {});
             }
+
+            setState(() {});
           }),
-          ...{
-            "EYFS": "EYFS", 
-            "1": "Year 1", "2": "Year 2", "3": "Year 3",
-            "4": "Year 4","5": "Year 5", "6": "Year 6",
-          }.entries.map((entry) => _buildBookList(
-            widget.books.where((book) => book.readingYear == entry.key).toList(),
-            entry.value,
-          ))
+          if (selectedCategoryTag != "none")
+            _buildBookList(
+              widget.books.where((book) => book.category == selectedCategoryTag).toList(),
+              selectedCategoryTag,
+              false,
+            )
+          else
+            ...{
+              "EYFS": "EYFS",
+              "1": "Year 1", "2": "Year 2", "3": "Year 3",
+              "4": "Year 4", "5": "Year 5", "6": "Year 6",
+            }.entries.map((entry) => _buildBookList(
+              widget.books.where((book) => book.readingYear == entry.key).toList(),
+              entry.value,
+              selectedYearTag != entry.key && selectedYearTag != "none",
+            )),
         ],
       ),
     );
   }
 
-  Widget _buildBookList(List<Book> books, String title) => Padding(
+  Widget _buildBookList(List<Book> books, String title, bool hidden) => !hidden ? Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
+          selectedYearTag != "none" && selectedCategoryTag != "none" ? "$selectedCategoryTag Year $selectedYearTag"
+            : selectedYearTag == "none" && selectedCategoryTag != "none" ? selectedCategoryTag
+            : selectedCategoryTag == "none" && selectedYearTag != "none" ? "Year $selectedYearTag"
+            : title,
           style: primaryFont.copyWith(
             color: Colors.grey,
             fontWeight: FontWeight.bold,
@@ -82,18 +100,15 @@ class _BardenInventoryState extends State<BardenInventory> {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemCount: books.length,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: books[index].isVisible ? BookItem(book: books[index], onBookTap: () {
-                  _showBookDetails(context, books[index]);
-                }) : const SizedBox(),
-              ),
+              itemBuilder: (context, index) => books[index].isVisible ? BookItem(book: books[index], onBookTap: () {
+                _showBookDetails(context, books[index]);
+              }) : const SizedBox(),
             ),
           ),
         ),
       ],
     ),
-  );
+  ) : const SizedBox();
 
   void _showBookDetails(BuildContext context, Book book) async => showDialog<void>(
     context: context,
