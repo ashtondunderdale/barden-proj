@@ -5,6 +5,8 @@ import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/inventory/expanded/book_author_top.dart';
 import 'package:flutter/material.dart';
 
+import '../top_title_bar.dart';
+
 
 class BardenInventory extends StatefulWidget {
   const BardenInventory({super.key, required this.books});
@@ -19,21 +21,31 @@ class _BardenInventoryState extends State<BardenInventory> {
   bool isHovering = false;
 
   @override
-  Widget build(BuildContext context) => SingleChildScrollView(
-    scrollDirection: Axis.vertical,
-    child: Column(
-      children: [
-        _buildBookList(widget.books.where((book) => book.readingYear == "EYFS").toList(), "EYFS"),
-        _buildBookList(widget.books.where((book) => book.readingYear == "1").toList(), "Year 1"),
-        _buildBookList(widget.books.where((book) => book.readingYear == "2").toList(), "Year 2"),
-        _buildBookList(widget.books.where((book) => book.readingYear == "3").toList(), "Year 3"),
-        _buildBookList(widget.books.where((book) => book.readingYear == "4").toList(), "Year 4"),
-        _buildBookList(widget.books.where((book) => book.readingYear == "5").toList(), "Year 5"),
-        _buildBookList(widget.books.where((book) => book.readingYear == "6").toList(), "Year 6"),
-
-      ],
-    ),
-  );
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          const TopTitleBar(activeAction: "Inventory"),
+          ...{
+            "EYFS": "EYFS",
+            "1": "Year 1",
+            "2": "Year 2",
+            "3": "Year 3",
+            "4": "Year 4",
+            "5": "Year 5",
+            "6": "Year 6",
+          }.entries.map((entry) => Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildBookList(
+              widget.books.where((book) => book.readingYear == entry.key).toList(),
+              entry.value,
+            ),
+          ))
+        ],
+      ),
+    );
+  }
 
   Widget _buildBookList(List<Book> books, String title) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,

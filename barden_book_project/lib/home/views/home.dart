@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 
 import '../models/book.dart';
 
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -25,6 +24,7 @@ class _HomeState extends State<Home> {
   String activeCategory = "";
   
   List<Book> books = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -35,6 +35,7 @@ class _HomeState extends State<Home> {
   void initializeBooks() async {
     books = await _azure.getBooks() ?? [];
     setState(() {
+      //_isLoading = false;
       activeActionBarWidget = BardenInventory(books: books);    
     });
   }
@@ -63,20 +64,38 @@ class _HomeState extends State<Home> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TopTitleBar(activeAction: activeAction),
-            Padding(
-              padding: const EdgeInsets.only(left: 32, top: 32),
-              child: SizedBox(
-                width: MediaQuery.sizeOf(context).width  - 120,
-                height: MediaQuery.sizeOf(context).height - 100,
-                child: activeActionBarWidget,
-              ),
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width - 120,
+              height: MediaQuery.sizeOf(context).height - 100,
+              child: _isLoading 
+                ? _buildLoadingPlaceholder()
+                : activeActionBarWidget,
             ),
           ],
         )
       ],
     ),
   );
+
+Widget _buildLoadingPlaceholder() {
+  return ListView.builder(
+    itemCount: 7,
+    itemBuilder: (context, rowIndex) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(8, (boxIndex) =>
+          Container(
+            width: 160, height: 240,
+            color: Colors.grey,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+  
 
   void _showAddBook(BuildContext context) async => showDialog<void>(
     context: context,
@@ -89,4 +108,3 @@ class _HomeState extends State<Home> {
     )
   );
 }
-
