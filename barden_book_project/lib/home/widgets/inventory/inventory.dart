@@ -32,9 +32,9 @@ class _BardenInventoryState extends State<BardenInventory> {
           InventoryTitleBar(activeAction: "Inventory", onReadingCategorySelected: (selectedCategory) {
             for (var book in widget.books) {
               selectedCategoryTag = selectedCategory;
-
+              
               if (book.category == selectedCategory) {
-                  book.isVisible = true;
+                book.isVisible = true;
               } else {
                 book.isVisible = false;
               }
@@ -47,7 +47,7 @@ class _BardenInventoryState extends State<BardenInventory> {
 
             for (var book in widget.books) {
               if (book.readingYear == selectedYear) {
-                  book.isVisible = true;
+                book.isVisible = true;
               } else {
                 book.isVisible = false;
               }
@@ -55,11 +55,10 @@ class _BardenInventoryState extends State<BardenInventory> {
 
             setState(() {});
           }),
-          if (selectedCategoryTag != "none")
+          if (selectedCategoryTag != "none" && selectedYearTag == "none")
             _buildBookList(
               widget.books.where((book) => book.category == selectedCategoryTag).toList(),
-              selectedCategoryTag,
-              false,
+              selectedCategoryTag, false,
             )
           else
             ...{
@@ -68,8 +67,7 @@ class _BardenInventoryState extends State<BardenInventory> {
               "4": "Year 4", "5": "Year 5", "6": "Year 6",
             }.entries.map((entry) => _buildBookList(
               widget.books.where((book) => book.readingYear == entry.key).toList(),
-              entry.value,
-              selectedYearTag != entry.key && selectedYearTag != "none",
+              entry.value, selectedYearTag != entry.key && selectedYearTag != "none",
             )),
         ],
       ),
@@ -82,9 +80,9 @@ class _BardenInventoryState extends State<BardenInventory> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          selectedYearTag != "none" && selectedCategoryTag != "none" ? "$selectedCategoryTag Year $selectedYearTag"
+          selectedYearTag != "none" && selectedCategoryTag != "none" ? selectedYearTag == "EYFS" ? "$selectedCategoryTag $selectedYearTag" : "$selectedCategoryTag Year $selectedYearTag"
             : selectedYearTag == "none" && selectedCategoryTag != "none" ? selectedCategoryTag
-            : selectedCategoryTag == "none" && selectedYearTag != "none" ? "Year $selectedYearTag"
+            : selectedCategoryTag == "none" && selectedYearTag != "none" ? selectedYearTag == "EYFS" ? "EYFS" : "Year $selectedYearTag"
             : title,
           style: primaryFont.copyWith(
             color: Colors.grey,
