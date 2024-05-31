@@ -30,6 +30,8 @@ class _BardenInventoryState extends State<BardenInventory> {
       child: Column(
         children: [
           InventoryTitleBar(
+          onSearch: () => setState(() {}),
+          books: widget.books,
           activeAction: "Inventory", 
           onReadingCategorySelected: (selectedCategory) {
             selectedCategoryTag = selectedCategory;
@@ -107,13 +109,16 @@ class _BardenInventoryState extends State<BardenInventory> {
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
             height: 240,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: books.length,
-              itemBuilder: (context, index) => books[index].isVisible ? BookItem(book: books[index], onBookTap: () {
-                _showBookDetails(context, books[index]);
-              }) : const SizedBox(),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: books.length,
+                itemBuilder: (context, index) => books[index].isVisible ? BookItem(book: books[index], onBookTap: () {
+                  _showBookDetails(context, books[index]);
+                }) : const SizedBox(),
+              ),
             ),
           ),
         ),

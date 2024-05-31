@@ -9,8 +9,8 @@ import '../../login/models/login.dart';
 import '../models/book.dart';
 
 class AzureService {
+  
   Future<bool> loginWithUsernameAndPassword(AuthModel auth) async {
-
     
     return true;
   }
@@ -41,8 +41,6 @@ class AzureService {
           isVisible: true
         ));
       }
-
-      print(books.length);
 
       return books;
     } catch (exception) {
@@ -110,6 +108,7 @@ class AzureService {
       //   headers: {},
       //   body: jsonEncode({}),
       // );
+      
     await Future.delayed(const Duration(seconds: 1));
 
     return false;

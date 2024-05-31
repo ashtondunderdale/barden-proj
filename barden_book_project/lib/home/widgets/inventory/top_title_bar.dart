@@ -1,19 +1,32 @@
 import 'package:barden_book_project/common/barden_close_icon.dart';
 import 'package:barden_book_project/common/barden_dropdown.dart';
+import 'package:barden_book_project/home/widgets/inventory/book_search_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/barden_button.dart';
 import '../../../constants.dart';
 import '../../../login/views/login.dart';
+import '../../models/book.dart';
 
 class InventoryTitleBar extends StatelessWidget {
-  const InventoryTitleBar({super.key, required this.activeAction, required this.onReadingCategorySelected, required this.onReadingYearSelected, required this.onFiltersCleared});
+  InventoryTitleBar({
+    super.key,
+    required this.activeAction, 
+    required this.onReadingCategorySelected, 
+    required this.onReadingYearSelected, 
+    required this.onFiltersCleared,
+    required this.books,
+    required this.onSearch
+  });
 
   final String activeAction;
   final Function(String) onReadingCategorySelected;
   final Function(String) onReadingYearSelected;
+  final VoidCallback onSearch;
 
   final VoidCallback onFiltersCleared;
+  final _searchController = TextEditingController();
+  final List<Book> books;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -54,6 +67,9 @@ class InventoryTitleBar extends StatelessWidget {
                   },
                 ),
               ),
+              BookSearchBar(controller: _searchController, books: books, onSearch:(text) {
+                onSearch();
+              }),
             ],
           ),
         ),

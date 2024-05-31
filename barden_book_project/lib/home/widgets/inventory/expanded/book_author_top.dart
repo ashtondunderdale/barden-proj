@@ -18,7 +18,7 @@ class BookAuthorTop extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           SizedBox(
-            width: 880,
+            width: MediaQuery.sizeOf(context).width * 0.6 - 45,
             child: Row(
               children: [
                 Padding(
@@ -26,7 +26,7 @@ class BookAuthorTop extends StatelessWidget {
                   child: Text(
                     book.title,
                     style: primaryFont.copyWith(
-                      fontSize: 32,
+                      fontSize: 28,
                       color: Colors.grey,
                       fontWeight: FontWeight.bold
                     ),
