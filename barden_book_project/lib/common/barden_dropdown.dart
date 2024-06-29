@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class BardenDropdown extends StatefulWidget {
-  BardenDropdown({
+  const BardenDropdown({
     super.key,
     required this.items,
     required this.onItemSelected,
