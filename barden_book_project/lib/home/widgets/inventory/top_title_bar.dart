@@ -35,6 +35,9 @@ class InventoryTitleBar extends StatefulWidget {
 }
 
 class _InventoryTitleBarState extends State<InventoryTitleBar> {
+  String _selectedExportCategory = readingCategories.first;
+  String _selectedExportYear = readingYears.first;
+
   @override
   Widget build(BuildContext context) => Row(
     children: [
@@ -61,26 +64,18 @@ class _InventoryTitleBarState extends State<InventoryTitleBar> {
               BardenDropdown(items: readingYears, value: selectedYearTag, onItemSelected: (item) {
                 widget.onReadingYearSelected(item);
               }), 
-              Tooltip(
-                message: "Clear Filters",
-                child: BardenIconButton(
-                  icon: Icon(
-                    Icons.clear,
-                    color: bardenPurple,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    widget.onFiltersCleared();
-                    
-                    setState(() {
-                      widget.searchController.clear();
-                    });
-                  },
-                ),
-              ),
+              BardenButton(text: "Clear Filters", isLoading: false, width: 150, onPressed: () {
+                widget.onFiltersCleared();
+                setState(() {
+                  widget.searchController.clear();
+                });
+              }),
               BookSearchBar(controller: widget.searchController, books: widget.books, onSearch:(text) {
                 widget.onSearch();
               }),
+              BardenButton(text: "Export", isLoading: false, width: 120, onPressed: () {
+                _showExport(context);
+              })
             ],
           ),
         ),
@@ -94,5 +89,51 @@ class _InventoryTitleBarState extends State<InventoryTitleBar> {
         isLoading: false
       )
     ],
+  );
+  
+  void _showExport(BuildContext context) async => showDialog<void>(
+    context: context,
+    builder: (BuildContext context) => Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: Container(
+          width: 600, height: 400,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8)
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Export as CSV",
+                  style: primaryFont.copyWith(
+                    color: const Color.fromARGB(255, 58, 58, 58),
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  BardenDropdown(items: readingCategories, value: _selectedExportCategory, onItemSelected: (item) {
+                    setState(() {
+                      _selectedExportCategory = item;
+                    });
+                  }),
+                  BardenDropdown(items: readingYears, value: _selectedExportYear, onItemSelected: (item) {
+                    setState(() {
+                      _selectedExportYear = item;
+                    });
+                  }),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    ),
   );
 }
