@@ -5,6 +5,8 @@ from os.path import join
 from azure.data.tables import TableServiceClient
 from azure.core.credentials import AzureNamedKeyCredential
 
+# flutter run -d chrome --web-browser-flag "--disable-web-security"
+
 from secrets import account_name, key, endpoint
 
 current_working_directory = os.getcwd()

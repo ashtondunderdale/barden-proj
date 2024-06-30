@@ -22,7 +22,7 @@ migrate_working_dir/
 #.vscode/
 
 _key.dart
-secrets.py
+secret_keys.py
 
 # Flutter/Dart/Pub related
 **/doc/api/

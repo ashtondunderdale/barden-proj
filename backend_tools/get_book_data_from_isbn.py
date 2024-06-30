@@ -1,24 +1,17 @@
-import os
-import pandas as pd
-from os.path import join
-from isbnlib import isbn_from_words, meta, cover
+from isbnlib import meta, cover
 
 
-def get_book_meta_data_from_isbn(row):
+def get_book_meta_data_from_isbn(isbn: str) -> dict:
 
-    row_num = row.name
-    print(f'Retrieving ISBN Number for Book : {row_num+1} of {len(book_df)}')
+    print(f'Retrieving book Information For ISBN Number {isbn}')
+    isbn = isbn.strip()
 
-    isbn = str(row['ISBN']).strip()
     title = authors = publisher = year = language = cover_url_thumbnail = cover_url_small_thumbnail = 'Unknown'
 
     try:
         meta_data = meta(isbn)
     except:
         meta_data = {}
-
-    # TODO
-    # check if all keys exist? error message
 
     try:
         meta_title = meta_data['Title'].strip()
@@ -69,30 +62,18 @@ def get_book_meta_data_from_isbn(row):
     except KeyError:
         pass
 
-    verbose = True
+    verbose = False
     if verbose:
         print(f'ISBN: {isbn} - Title: {title} - Author(s): {authors} - Publisher: {publisher} - Year: {year} - Language - {language}  - Cover URL Small Thumbnail: {cover_url_small_thumbnail}')
 
-    return title, authors, publisher, year, language, cover_url_thumbnail, cover_url_small_thumbnail
+    book_record = {'title': title, 'author': authors, 'publisher': publisher,
+                   'year': year, 'language': language,
+                   'cover_url_thumbnail': cover_url_thumbnail,
+                   'cover_url, small_thumbnail': cover_url_small_thumbnail}
 
-# obj = {'ISBN': 9780747532743}
-# get_book_meta_data_from_isbn(obj)
+    return book_record
 
-
-current_working_directory = os.getcwd()
-data_dir = join(current_working_directory, 'Data\\csv_files')
-book_df = pd.read_csv(join(data_dir, 'barden_book_list_with_isbn.csv'))
-
-book_df.rename(columns={'Year': 'Reading Year'}, inplace=True)
-
-# book_df = book_df.head(50)
-
-book_df['Metadata Title'], book_df['Metadata Author'], book_df['Metadata Publisher'], book_df['Metadata Year'], book_df['Metadata Language'], book_df['Metadata Cover URL Thumbnail'], book_df['Metadata Cover URL Small Thumbnail'] = zip(*book_df.apply(lambda x: get_book_meta_data_from_isbn(x), axis=1))
-book_df['Number Of Copies'] = 1
-
-print(book_df)
-
-# create csv from list
-data_dir = join(current_working_directory, 'Data\\csv_files')
-book_df.to_csv(join(data_dir, 'barden_book_list_with_isbn_and_metadata.csv'),
-               index=False)
+# test
+isbn_test = '9780008293338'
+book_record = get_book_meta_data_from_isbn(isbn_test)
+print(book_record)
