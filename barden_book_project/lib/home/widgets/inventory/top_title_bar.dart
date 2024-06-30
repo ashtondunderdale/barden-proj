@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:csv/csv.dart';
+import 'package:file_saver/file_saver.dart';
+
 import 'package:barden_book_project/common/barden_close_icon.dart';
 import 'package:barden_book_project/common/barden_dropdown.dart';
 import 'package:barden_book_project/data.dart';
 import 'package:barden_book_project/home/widgets/inventory/book_search_bar.dart';
 import 'package:flutter/material.dart';
-
 import '../../../common/barden_button.dart';
 import '../../../constants.dart';
 import '../../../login/views/login.dart';
@@ -35,8 +40,6 @@ class InventoryTitleBar extends StatefulWidget {
 }
 
 class _InventoryTitleBarState extends State<InventoryTitleBar> {
-  String _selectedExportCategory = readingCategories.first;
-  String _selectedExportYear = readingYears.first;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -90,50 +93,143 @@ class _InventoryTitleBarState extends State<InventoryTitleBar> {
       )
     ],
   );
-  
+
   void _showExport(BuildContext context) async => showDialog<void>(
     context: context,
-    builder: (BuildContext context) => Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
-        child: Container(
-          width: 600, height: 400,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8)
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Export as CSV",
-                  style: primaryFont.copyWith(
-                    color: const Color.fromARGB(255, 58, 58, 58),
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold
-                  ),
+    builder: (BuildContext context) {
+      String exportCategory = readingCategories.first;
+      String exportYear = readingYears.first;
+
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: Container(
+                width: 600,
+                height: 400,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8)
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Export as CSV",
+                            style: primaryFont.copyWith(
+                              color: const Color.fromARGB(255, 58, 58, 58),
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 24, right: 8),
+                          child: BardenIconButton(icon: Icon(
+                            Icons.close,
+                            color: bardenPurple,
+                            size: 20,
+                          ), 
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        BardenDropdown(items: readingCategories, value: exportCategory, onItemSelected: (item) {
+                          setState(() {
+                            exportCategory = item;
+                          });
+                        }),
+                        BardenDropdown(items: readingYears, value: exportYear, onItemSelected: (item) {
+                          setState(() {
+                            exportYear = item;
+                          });
+                        }),
+                      ],
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: BardenButton(
+                        text: "Export", 
+                        isLoading: false, 
+                        width: 120, 
+                        onPressed: () {
+                          List<Book> filteredBooks = [];
+
+                          for (var book in widget.books) {
+                            if (book.readingYear == exportYear && book.category == exportCategory) {
+                              filteredBooks.add(book);
+                            }
+                          }
+
+                          List<List<dynamic>> cols = [];
+                          cols.add([
+                            "Title", 
+                            "Author", 
+                            "ISBN", 
+                            "Cover URL", 
+                            "Category", 
+                            "Lexile Level", 
+                            "Publisher", 
+                            "Reading Year", 
+                            "Release Year", 
+                            "Language", 
+                            "BL Score", 
+                            "Number of Copies",
+                          ]);
+
+                          for (var book in filteredBooks) {
+                            List<dynamic> row = [];
+
+                            row.add(book.title);
+                            row.add(book.author);
+                            row.add(book.isbn.toString());
+                            row.add(book.coverUrl);
+                            row.add(book.category);
+                            row.add(book.lexileLevel);
+                            row.add(book.publisher);
+                            row.add(book.readingYear);
+                            row.add(book.releaseYear);
+                            row.add(book.language);
+                            row.add(book.blScore);
+                            row.add(book.numberOfCopies);
+
+                            cols.add(row);
+                          }
+
+                          String csv = const ListToCsvConverter().convert(cols);
+                          downloadCSV(csv);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Row(
-                children: [
-                  BardenDropdown(items: readingCategories, value: _selectedExportCategory, onItemSelected: (item) {
-                    setState(() {
-                      _selectedExportCategory = item;
-                    });
-                  }),
-                  BardenDropdown(items: readingYears, value: _selectedExportYear, onItemSelected: (item) {
-                    setState(() {
-                      _selectedExportYear = item;
-                    });
-                  }),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    ),
+            ),
+          );
+        },
+      );
+    },
   );
+
+  downloadCSV(String file) async {
+    Uint8List bytes = Uint8List.fromList(utf8.encode(file));
+
+    await FileSaver.instance.saveFile(
+      name: 'barden_book_data',
+      bytes: bytes,
+      ext: 'csv',
+      mimeType: MimeType.csv,
+    );
+  }
 }
