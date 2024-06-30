@@ -33,13 +33,18 @@ class _BardenInventoryState extends State<BardenInventory> {
         books: widget.books,
         activeAction: "Inventory", 
         onReadingCategorySelected: (selectedCategory) {
-          selectedCategoryTag = selectedCategory;
-          _updateBookVisibility();
-          setState(() {});
+          setState(() {
+            selectedCategoryTag = selectedCategory;
+            _searchController.clear();
+            
+            _updateBookVisibility();
+          });
         },
         onReadingYearSelected: (selectedYear) {
           setState(() {
             selectedYearTag = selectedYear;
+            _searchController.clear();
+
             _updateBookVisibility();
           });
         },

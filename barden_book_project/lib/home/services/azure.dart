@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:azstore/azstore.dart';
 
 import '../../_key.dart';
@@ -5,7 +7,7 @@ import '../../login/models/login.dart';
 import '../models/book.dart';
 
 class AzureService {
-  final storage = AzureStorage.parse(connStr);
+  final _storage = AzureStorage.parse(connStr);
   
   static const String bookTableName = "bookinventory";
   static const String recordTableName = "";
@@ -14,11 +16,20 @@ class AzureService {
 
   Future<bool> loginWithUsernameAndPassword(AuthModel auth) async {
     try {
-      
+      var users = await _storage.filterTableRows(tableName: bookTableName, filter: "", top: 300);
 
-      
+      for (var user in users) {
+        var username = user["username"];
+        var password = user["password"];
 
-      return true;
+        return true; // remove this
+
+        if (username == auth.username && password == auth.password) {
+          return true;
+        }
+      }
+
+      return false;
 
     } catch (exception) {
       await logError("Error in loginWithUsernameAndPassword  $exception");
@@ -39,7 +50,7 @@ class AzureService {
 
   Future<List<Book>?> getBooks() async {
     try {
-      var result = await storage.filterTableRows(tableName: bookTableName, filter: "", top: 300);
+      var result = await _storage.filterTableRows(tableName: bookTableName, filter: "", top: 300);
 
       List<Book> books = [];
 
@@ -74,9 +85,16 @@ class AzureService {
 
   Future<bool> addBook(String isbn, String year, String category) async {
     try {
+      var partitionKey = "1";
+      var rowKey = "";
 
+      Map<String, dynamic> rowMap = {
+        "PartitionKey": partitionKey, "RowKey": rowKey
+      };
 
-      await Future.delayed(const Duration(seconds: 1));
+      await _storage.upsertTableRow(
+        tableName: bookTableName, rowKey: rowKey, partitionKey: partitionKey, bodyMap: rowMap
+      );
 
       return true;
 
@@ -89,9 +107,16 @@ class AzureService {
 
   Future<bool> removeBook(String isbn, String year, String category) async {
     try {
+      var partitionKey = "1";
+      var rowKey = "";
 
+      Map<String, dynamic> rowMap = {
+        "PartitionKey": partitionKey, "RowKey": rowKey
+      };
 
-      await Future.delayed(const Duration(seconds: 1));
+      await _storage.deleteTableRow(
+        tableName: bookTableName, rowKey: rowKey, partitionKey: partitionKey, 
+      );
 
       return true;
 
@@ -104,9 +129,16 @@ class AzureService {
 
   Future<bool> updateBook(String isbn, String year, String category) async {
     try {
+      var partitionKey = "";
+      var rowKey = "";
 
+      Map<String, dynamic> rowMap = {
+        "PartitionKey": partitionKey, "RowKey": rowKey
+      };
 
-      await Future.delayed(const Duration(seconds: 1));
+      await _storage.upsertTableRow(
+        tableName: bookTableName, rowKey: rowKey, partitionKey: partitionKey, bodyMap: rowMap
+      );
 
       return true;
 
