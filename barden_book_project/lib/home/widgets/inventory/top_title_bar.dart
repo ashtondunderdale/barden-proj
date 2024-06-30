@@ -52,13 +52,28 @@ class _InventoryTitleBarState extends State<InventoryTitleBar> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 32),
-                child: Text(
-                  widget.activeAction,
-                  style: primaryFont.copyWith(
-                    color: const Color.fromARGB(255, 58, 58, 58),
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold
-                  ),
+                child: Row(
+                  children: [
+                    Text(
+                      widget.activeAction,
+                      style: primaryFont.copyWith(
+                        color: const Color.fromARGB(255, 58, 58, 58),
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Text(
+                        "(${widget.books.length.toString()})",
+                        style: primaryFont.copyWith(
+                          color: const Color.fromARGB(255, 111, 111, 111),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               BardenDropdown(items: readingCategories, value: selectedCategoryTag, onItemSelected: (item) {
@@ -83,13 +98,16 @@ class _InventoryTitleBarState extends State<InventoryTitleBar> {
           ),
         ),
       ),
-      BardenButton(
-        width: 100,
-        text: "LOGOUT", 
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
-        }, 
-        isLoading: false
+      Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: BardenButton(
+          width: 100,
+          text: "Logout", 
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
+          }, 
+          isLoading: false
+        ),
       )
     ],
   );
@@ -107,7 +125,7 @@ class _InventoryTitleBarState extends State<InventoryTitleBar> {
             body: Center(
               child: Container(
                 width: 600,
-                height: 400,
+                height: 230,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8)
@@ -118,7 +136,7 @@ class _InventoryTitleBarState extends State<InventoryTitleBar> {
                     Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(16),
                           child: Text(
                             "Export as CSV",
                             style: primaryFont.copyWith(
@@ -142,19 +160,22 @@ class _InventoryTitleBarState extends State<InventoryTitleBar> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        BardenDropdown(items: readingCategories, value: exportCategory, onItemSelected: (item) {
-                          setState(() {
-                            exportCategory = item;
-                          });
-                        }),
-                        BardenDropdown(items: readingYears, value: exportYear, onItemSelected: (item) {
-                          setState(() {
-                            exportYear = item;
-                          });
-                        }),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          BardenDropdown(items: readingCategories, value: exportCategory, onItemSelected: (item) {
+                            setState(() {
+                              exportCategory = item;
+                            });
+                          }),
+                          BardenDropdown(items: readingYears, value: exportYear, onItemSelected: (item) {
+                            setState(() {
+                              exportYear = item;
+                            });
+                          }),
+                        ],
+                      ),
                     ),
                     const Spacer(),
                     Padding(

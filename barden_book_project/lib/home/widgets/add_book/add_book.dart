@@ -1,6 +1,8 @@
 import 'package:barden_book_project/common/barden_close_icon.dart';
+import 'package:barden_book_project/common/barden_dropdown.dart';
 import 'package:barden_book_project/home/services/azure.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 import '../../../common/barden_button.dart';
 import '../../../common/barden_field.dart';
@@ -19,9 +21,9 @@ class _BardenAddBookState extends State<BardenAddBook> {
   final _azure = AzureService();
 
   final _isbnController = TextEditingController();
-  final _yearController = TextEditingController();
   final _copiesController = TextEditingController();
-  String _dropdownValue = readingCategories[1];
+  String _selectedReadingCategory = readingCategories[1];
+  String _selectedReadingYear = readingYears[1];
   
   bool _isLoading = false;
 
@@ -52,51 +54,42 @@ class _BardenAddBookState extends State<BardenAddBook> {
                 ),
               ],
             ),
-            BardenField(
-              controller: _isbnController,
-              width: 240,
-              fieldName: "ISBN", 
-              onFieldChanged: () {}
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    child: DropdownButton<String>(
-                      value: _dropdownValue,
-                      onChanged: (val) {
-                        widget.onCategoryChanged(val!);    
-                        setState(() => _dropdownValue = val );
-                      },
-                      items: readingCategories.where((e) => e != "All")
-                        .map((e) => DropdownMenuItem<String>(
-                          value: e,
-                          child: Text(e),
-                        ))
-                        .toList(),
-                      style: primaryFont.copyWith(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    )
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Row(
+                children: [
+                  BardenField(
+                    controller: _isbnController,
+                    width: 240,
+                    fieldName: "ISBN", 
+                    onFieldChanged: () {}
                   ),
-                ),
-                BardenField(
-                  controller: _yearController,
-                  width: 100,
-                  fieldName: "Year", 
-                  onFieldChanged: () {}
-                ),
-                BardenField(
-                  controller: _copiesController,
-                  width: 100,
-                  fieldName: "Copies", 
-                  onFieldChanged: () {}
-                ),
-              ],
+                  BardenField(
+                    controller: _copiesController,
+                    width: 100,
+                    fieldName: "Copies", 
+                    onFieldChanged: () {}
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  BardenDropdown(items: readingCategories, value: _selectedReadingCategory, onItemSelected: (item) {
+                    setState(() {
+                      _selectedReadingCategory = item;
+                    });
+                  }),
+                  BardenDropdown(items: readingYears, value: _selectedReadingYear, onItemSelected: (item) {
+                    setState(() {
+                      _selectedReadingYear = item;
+                    });
+                  }),
+                ],
+              ),
             ),
             const Spacer(),
             Row(
@@ -104,12 +97,12 @@ class _BardenAddBookState extends State<BardenAddBook> {
               children: [
                 BardenButton(
                   text: "ADD", 
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
                       _isLoading = true;
                     });
 
-                    _azure.addBook(_isbnController.text, _yearController.text, _dropdownValue, 0);
+                    await _azure.addBook(_isbnController.text, _selectedReadingCategory, _selectedReadingYear, 0);
 
                     setState(() {
                       _isLoading = false;
