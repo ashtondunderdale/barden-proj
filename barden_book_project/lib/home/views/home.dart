@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
   String activeCategory = "";
   
   List<Book> books = [];
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   Color _currentColor = const Color.fromARGB(255, 203, 203, 203);
   
@@ -35,7 +35,11 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  void initializeBooks() async {
+  Future initializeBooks() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     books = await _azure.getBooks() ?? [];
 
     setState(() {
@@ -62,11 +66,13 @@ class _HomeState extends State<Home> {
       children: [
         BardenActionBar(
           activeAction: activeAction,
-          onDashboardTap: () {
+          onDashboardTap: () async {
+            await initializeBooks();
+
             setState(() {
               activeAction = "Inventory";
               activeActionBarWidget = BardenInventory(books: books);
-            });       
+            });
           },
           addBookTap: () {
             _showAddBook(context);

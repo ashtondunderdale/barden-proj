@@ -21,13 +21,13 @@ class BardenInventory extends StatefulWidget {
 class _BardenInventoryState extends State<BardenInventory> {
   bool isHovering = false;
   final _searchController = TextEditingController();
+  String selectedCategoryTag = "All";
+  String selectedYearTag = "All";
 
   @override
-  Widget build(BuildContext context) => SingleChildScrollView(
-    scrollDirection: Axis.vertical,
-    child: Column(
-      children: [
-        InventoryTitleBar(
+  Widget build(BuildContext context) => Column(
+    children: [
+      InventoryTitleBar(
         onSearch: () => setState(() {}),
         searchController: _searchController,
         books: widget.books,
@@ -36,7 +36,6 @@ class _BardenInventoryState extends State<BardenInventory> {
           setState(() {
             selectedCategoryTag = selectedCategory;
             _searchController.clear();
-            
             _updateBookVisibility();
           });
         },
@@ -44,38 +43,45 @@ class _BardenInventoryState extends State<BardenInventory> {
           setState(() {
             selectedYearTag = selectedYear;
             _searchController.clear();
-
             _updateBookVisibility();
           });
         },
-        onFiltersCleared: () 
-        {  
-          for (var book in widget.books) {
-            setState(() {
+        onFiltersCleared: () {  
+          setState(() {
+            for (var book in widget.books) {
               book.isVisible = true;
-              selectedCategoryTag = "All";
-              selectedYearTag = "All";
-            });
-          }
-        }),
-        if (_searchController.text.isNotEmpty)
-          _buildSearchBookList(widget.books.where((e) => e.isVisible).toList())
-        else if (selectedCategoryTag != "All" && selectedYearTag == "All")
-          _buildBookList(
-            widget.books.where((book) => book.category == selectedCategoryTag).toList(),
-            selectedCategoryTag, false,
-          )
-        else
-          ...{
-            "EYFS": "EYFS",
-            "1": "Year 1", "2": "Year 2", "3": "Year 3",
-            "4": "Year 4", "5": "Year 5", "6": "Year 6",
-          }.entries.map((entry) => _buildBookList(
-            widget.books.where((book) => book.readingYear == entry.key).toList(),
-            entry.value, selectedYearTag != entry.key && selectedYearTag != "All",
-          )),
-      ],
-    ),
+            }
+            selectedCategoryTag = "All";
+            selectedYearTag = "All";
+          });
+        },
+      ),
+      Expanded(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              if (_searchController.text.isNotEmpty)
+                _buildSearchBookList(widget.books.where((e) => e.isVisible).toList())
+              else if (selectedCategoryTag != "All" && selectedYearTag == "All")
+                _buildBookList(
+                  widget.books.where((book) => book.category == selectedCategoryTag).toList(),
+                  selectedCategoryTag, false,
+                )
+              else
+                ...{
+                  "EYFS": "EYFS",
+                  "1": "Year 1", "2": "Year 2", "3": "Year 3",
+                  "4": "Year 4", "5": "Year 5", "6": "Year 6",
+                }.entries.map((entry) => _buildBookList(
+                  widget.books.where((book) => book.readingYear == entry.key).toList(),
+                  entry.value, selectedYearTag != entry.key && selectedYearTag != "All",
+                )),
+            ],
+          ),
+        ),
+      ),
+    ],
   );
 
   void _updateBookVisibility() {

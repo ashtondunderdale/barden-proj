@@ -20,7 +20,8 @@ class _BardenAddBookState extends State<BardenAddBook> {
 
   final _isbnController = TextEditingController();
   final _yearController = TextEditingController();
-  String _dropdownValue = readingCategories.first;
+  final _copiesController = TextEditingController();
+  String _dropdownValue = readingCategories[1];
   
   bool _isLoading = false;
 
@@ -69,9 +70,12 @@ class _BardenAddBookState extends State<BardenAddBook> {
                         widget.onCategoryChanged(val!);    
                         setState(() => _dropdownValue = val );
                       },
-                      items: readingCategories.map((e) => DropdownMenuItem<String>(
-                        value: e, child: Text(e)
-                      )).toList(),
+                      items: readingCategories.where((e) => e != "All")
+                        .map((e) => DropdownMenuItem<String>(
+                          value: e,
+                          child: Text(e),
+                        ))
+                        .toList(),
                       style: primaryFont.copyWith(
                         color: Colors.grey,
                         fontWeight: FontWeight.bold,
@@ -84,6 +88,12 @@ class _BardenAddBookState extends State<BardenAddBook> {
                   controller: _yearController,
                   width: 100,
                   fieldName: "Year", 
+                  onFieldChanged: () {}
+                ),
+                BardenField(
+                  controller: _copiesController,
+                  width: 100,
+                  fieldName: "Copies", 
                   onFieldChanged: () {}
                 ),
               ],
@@ -99,7 +109,7 @@ class _BardenAddBookState extends State<BardenAddBook> {
                       _isLoading = true;
                     });
 
-                    _azure.addBook(_isbnController.text, _yearController.text, _dropdownValue);
+                    _azure.addBook(_isbnController.text, _yearController.text, _dropdownValue, 0);
 
                     setState(() {
                       _isLoading = false;

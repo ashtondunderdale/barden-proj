@@ -35,7 +35,6 @@ class InventoryTitleBar extends StatefulWidget {
 }
 
 class _InventoryTitleBarState extends State<InventoryTitleBar> {
-
   @override
   Widget build(BuildContext context) => Row(
     children: [

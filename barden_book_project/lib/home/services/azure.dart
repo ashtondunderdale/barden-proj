@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:flet/flet.dart';
 
 import 'package:azstore/azstore.dart';
 
@@ -83,18 +83,9 @@ class AzureService {
   }
 
 
-  Future<bool> addBook(String isbn, String year, String category) async {
+  Future<bool> addBook(String isbn, String year, String category, int copies) async {
     try {
-      var partitionKey = "1";
-      var rowKey = "";
 
-      Map<String, dynamic> rowMap = {
-        "PartitionKey": partitionKey, "RowKey": rowKey
-      };
-
-      await _storage.upsertTableRow(
-        tableName: bookTableName, rowKey: rowKey, partitionKey: partitionKey, bodyMap: rowMap
-      );
 
       return true;
 
