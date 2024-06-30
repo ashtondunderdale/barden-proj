@@ -1,27 +1,44 @@
-import 'dart:convert';
-
 import 'package:azstore/azstore.dart';
-import 'package:http/http.dart' as http;
 
 import '../../_key.dart';
 import '../../login/models/login.dart';
 import '../models/book.dart';
 
 class AzureService {
-
-  var storage = AzureStorage.parse(connStr);
+  final storage = AzureStorage.parse(connStr);
   
   static const String bookTableName = "bookinventory";
+  static const String recordTableName = "";
+  static const String userTableName = "";
 
 
   Future<bool> loginWithUsernameAndPassword(AuthModel auth) async {
-    
-    return true;
+    try {
+      
+
+      
+
+      return true;
+
+    } catch (exception) {
+      await logError("Error in loginWithUsernameAndPassword  $exception");
+      return false;
+    }
   }
+
+  Future<void> logError(String error) async {
+    try {
+      print(error);
+
+
+    } catch (exception) {
+      await logError("Error in logError (confusing) $exception");
+    }
+  }
+
 
   Future<List<Book>?> getBooks() async {
     try {
-
       var result = await storage.filterTableRows(tableName: bookTableName, filter: "", top: 300);
 
       List<Book> books = [];
@@ -47,45 +64,55 @@ class AzureService {
       }
 
       return books;
+
     } catch (exception) {
-      print(exception);
+      await logError("Error in loginWithUsernameAndPassword  $exception");
       return null;
     }
   }
 
+
   Future<bool> addBook(String isbn, String year, String category) async {
+    try {
 
-      final response = http.put(Uri.parse(""),
-        headers: {},
-        body: jsonEncode({}),
-      );
-      
-    await Future.delayed(const Duration(seconds: 1));
 
-    return false;
+      await Future.delayed(const Duration(seconds: 1));
+
+      return true;
+
+    } catch (exception) {
+      logError("Error in addBook $exception");
+      return false;
+    }
   }
+
 
   Future<bool> removeBook(String isbn, String year, String category) async {
+    try {
 
-      final response = http.put(Uri.parse(""),
-        headers: {},
-        body: jsonEncode({}),
-      );
-      
-    await Future.delayed(const Duration(seconds: 1));
 
-    return false;
+      await Future.delayed(const Duration(seconds: 1));
+
+      return true;
+
+    } catch (exception) {
+      logError("Error in removeBook $exception");
+      return false;
+    }
   }
 
+
   Future<bool> updateBook(String isbn, String year, String category) async {
+    try {
 
-      final response = http.put(Uri.parse(""),
-        headers: {},
-        body: jsonEncode({}),
-      );
-      
-    await Future.delayed(const Duration(seconds: 1));
 
-    return false;
+      await Future.delayed(const Duration(seconds: 1));
+
+      return true;
+
+    } catch (exception) {
+      logError("Error in updateBook $exception");
+      return false;
+    }
   }
 }
