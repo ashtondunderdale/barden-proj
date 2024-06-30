@@ -5,6 +5,7 @@ import 'package:barden_book_project/common/barden_button.dart';
 import 'package:barden_book_project/home/widgets/inventory/expanded/book_author_top.dart';
 import 'package:flutter/material.dart';
 
+import '../../../data.dart';
 import 'top_title_bar.dart';
 
 
@@ -19,9 +20,6 @@ class BardenInventory extends StatefulWidget {
 
 class _BardenInventoryState extends State<BardenInventory> {
   bool isHovering = false;
-
-  String selectedYearTag = "none";
-  String selectedCategoryTag = "none";
 
   @override
   Widget build(BuildContext context) {

@@ -17,23 +17,28 @@ class BookAuthorTop extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          SizedBox(
-            width: MediaQuery.sizeOf(context).width * 0.6 - 45,
+          Expanded(
             child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Text(
-                    book.title,
-                    style: primaryFont.copyWith(
-                      fontSize: 28,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.bold
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: Tooltip(
+                      message: book.title,
+                      child: Text(
+                        book.title,
+                        style: primaryFont.copyWith(
+                          fontSize: 28,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 16),
+                  padding: const EdgeInsets.only(right: 28),
                   child: Text(
                     book.author,
                     style: primaryFont.copyWith(
@@ -46,12 +51,15 @@ class BookAuthorTop extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 20),
-            child: BardenIconButton(onPressed: () => Navigator.pop(context), icon: Icon(
-              Icons.close,
-              color: bardenPurple,
-              size: 20,
-            )),
+            padding: const EdgeInsets.only(bottom: 20, right: 16),
+            child: BardenIconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.close,
+                color: bardenPurple,
+                size: 20,
+              ),
+            ),
           ),
         ],
       ),
