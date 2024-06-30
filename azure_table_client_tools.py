@@ -7,6 +7,7 @@ import pandas as pd
 
 storage_account_conn_str = ''
 
+
 def create_table_or_get_if_exists(table_name, connection_string=storage_account_conn_str):
 
     """Creates Azure Storage Table or retrieves if it already exists."""
@@ -22,6 +23,7 @@ def create_table_or_get_if_exists(table_name, connection_string=storage_account_
 
     return table_client
 
+
 def get_ordered_table_results(table_client, my_filter, datetime_column='DateOfObservation'):
 
     """Gets ordered table results using a table client and filter."""
@@ -35,5 +37,5 @@ def get_ordered_table_results(table_client, my_filter, datetime_column='DateOfOb
     if list_of_dict_observations:
         table_df = pd.DataFrame.from_records(list_of_dict_observations)
         table_df.sort_values(by=datetime_column, inplace=True, ascending=True)
-    
+
     return table_df

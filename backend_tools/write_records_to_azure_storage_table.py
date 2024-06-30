@@ -5,29 +5,23 @@ from os.path import join
 from azure.data.tables import TableServiceClient
 from azure.core.credentials import AzureNamedKeyCredential
 
+from secrets import account_name, key, endpoint
+
 current_working_directory = os.getcwd()
 data_dir = join(current_working_directory, 'Data\\csv_files')
 book_df = pd.read_csv(join(data_dir, 'barden_book_list_with_isbn_and_metadata.csv'))
 
 print(book_df.columns)
 
-account_name = "bardenbooklibrarystorage"
 
-# https://bardenbooklibrarystorage.table.core.windows.net/bookinventory
+def authenticate_with_table_service(account_name, key, endpoint):
 
-key = 'gBLyZVEu63p4avo0PmaZwYTxvDjX2OoLPPs2w2Ll4rDZwu9S/j/x0N+EEgtvZzWXMnsQbniqdEWa+AStKnfLxg=='
-endpoint = 'https://bardenbooklibrarystorage.table.core.windows.net/bookinventory'
-credential = AzureNamedKeyCredential(account_name, key)
+    credential = AzureNamedKeyCredential(account_name, key)
 
-service = TableServiceClient(endpoint=endpoint, credential=credential)
-books_table = service.get_table_client('bookinventory')
+    service = TableServiceClient(endpoint=endpoint, credential=credential)
+    books_table = service.get_table_client('bookinventory')
 
-# connection_string = "DefaultEndpointsProtocol=https;AccountName=bardenbooklibrarystorage;AccountKey=gBLyZVEu63p4avo0PmaZwYTxvDjX2OoLPPs2w2Ll4rDZwu9S/j/x0N+EEgtvZzWXMnsQbniqdEWa+AStKnfLxg==;EndpointSuffix=core.windows.net"
-# with TableServiceClient.from_connection_string(conn_str=connection_string) as table_service_client:
-#     properties = table_service_client.get_service_properties()
-#     print(f"{properties}")
-
-# books_table = table_service_client.get_table_client("bookinventory")
+    return books_table
 
 
 def create_record_from_df_row(row):
@@ -79,6 +73,8 @@ def add_record_to_table(record, table):
     
 book_df['azure_table_record'] = book_df.apply(lambda x : create_record_from_df_row(x), axis=1)
 print(book_df['azure_table_record'])
+
+books_table = authenticate_with_table_service(account_name, key, endpoint)
 
 for index, row in book_df.iterrows():
 
