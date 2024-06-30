@@ -104,16 +104,31 @@ class _BardenInventoryState extends State<BardenInventory> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 48),
-          child: Text(
-            selectedYearTag != "All" && selectedCategoryTag != "All" ? selectedYearTag == "EYFS" ? "$selectedCategoryTag $selectedYearTag" : "$selectedCategoryTag Year $selectedYearTag"
-              : selectedYearTag == "All" && selectedCategoryTag != "All" ? selectedCategoryTag
-              : selectedCategoryTag == "All" && selectedYearTag != "All" ? selectedYearTag == "EYFS" ? "EYFS" : "Year $selectedYearTag"
-              : title,
-            style: primaryFont.copyWith(
-              color: Colors.grey,
-              fontWeight: FontWeight.bold,
-              fontSize: 48
-            ),
+          child: Row(
+            children: [
+              Text(
+                selectedYearTag != "All" && selectedCategoryTag != "All" ? selectedYearTag == "EYFS" ? "$selectedCategoryTag $selectedYearTag" : "$selectedCategoryTag Year $selectedYearTag"
+                  : selectedYearTag == "All" && selectedCategoryTag != "All" ? selectedCategoryTag
+                  : selectedCategoryTag == "All" && selectedYearTag != "All" ? selectedYearTag == "EYFS" ? "EYFS" : "Year $selectedYearTag"
+                  : title,
+                style: primaryFont.copyWith(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 48
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 16),
+                child: Text(
+                  books.where((e) => e.isVisible).length.toString(),
+                  style: primaryFont.copyWith(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Padding(
@@ -137,40 +152,56 @@ class _BardenInventoryState extends State<BardenInventory> {
     ),
   ) : const SizedBox();
 
-  Widget _buildSearchBookList(List<Book> books) => Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: MediaQuery.sizeOf(context).height - 220,
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 7, 
-                  childAspectRatio: 0.75, 
-                ),
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: books.length,
-                itemBuilder: (context, index) => books[index].isVisible
-                    ? BookItem(
-                        book: books[index],
-                        onBookTap: () {
-                          _showBookDetails(context, books[index]);
-                        },
-                      )
-                    : const SizedBox(),
+  Widget _buildSearchBookList(List<Book> books) { 
+
+    var matches = books.where((e) => e.isVisible).length.toString();
+    
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 16),
+            child: Text(
+              matches == "1" ? "$matches Match" : "$matches Matches",
+              style: primaryFont.copyWith(
+                color: Colors.grey,
+                fontWeight: FontWeight.bold,
+                fontSize: 18
               ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: MediaQuery.sizeOf(context).height - 220,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 7, 
+                    childAspectRatio: 0.75, 
+                  ),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: books.length,
+                  itemBuilder: (context, index) => books[index].isVisible
+                      ? BookItem(
+                          book: books[index],
+                          onBookTap: () {
+                            _showBookDetails(context, books[index]);
+                          },
+                        )
+                      : const SizedBox(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _showBookDetails(BuildContext context, Book book) async => showDialog<void>(
     context: context,
