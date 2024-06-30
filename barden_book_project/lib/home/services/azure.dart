@@ -1,5 +1,5 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:azstore/azstore.dart';
 
 import '../../_key.dart';
@@ -7,16 +7,50 @@ import '../../login/models/login.dart';
 import '../models/book.dart';
 
 class AzureService {
+  final _storage = AzureStorage.parse(connStr);
   
+  static const String bookTableName = "bookinventory";
+  static const String recordTableName = "";
+  static const String userTableName = "";
+
+
   Future<bool> loginWithUsernameAndPassword(AuthModel auth) async {
-    
-    return true;
+    try {
+      var users = await _storage.filterTableRows(tableName: bookTableName, filter: "", top: 300);
+
+      for (var user in users) {
+        var username = user["username"];
+        var password = user["password"];
+
+        return true; // remove this
+
+        if (username == auth.username && password == auth.password) {
+          return true;
+        }
+      }
+
+      return false;
+
+    } catch (exception) {
+      await logError("Error in loginWithUsernameAndPassword  $exception");
+      return false;
+    }
   }
+
+  Future<void> logError(String error) async {
+    try {
+      print(error);
+
+
+    } catch (exception) {
+      await logError("Error in logError (confusing) $exception");
+    }
+  }
+
 
   Future<List<Book>?> getBooks() async {
     try {
-      var storage = AzureStorage.parse(connStr);
-      var result = await storage.filterTableRows(tableName: 'bookinventory', filter: "", top: 300);
+      var result = await _storage.filterTableRows(tableName: bookTableName, filter: "", top: 300);
 
       List<Book> books = [];
 
@@ -41,74 +75,76 @@ class AzureService {
       }
 
       return books;
+
     } catch (exception) {
-      print(exception);
+      await logError("Error in loginWithUsernameAndPassword  $exception");
       return null;
     }
   }
 
-  void getFiles() async {
+
+  Future<bool> addBook(String isbn, String year, String category) async {
     try {
-      var chosenFiles = await FilePicker.platform.pickFiles(allowMultiple: true);    
+      var partitionKey = "1";
+      var rowKey = "";
 
-      if (chosenFiles == null || chosenFiles.files.isEmpty) {
-        return;
-      }
+      Map<String, dynamic> rowMap = {
+        "PartitionKey": partitionKey, "RowKey": rowKey
+      };
 
-      List<String> httpMessages = [];
-
-      for (var file in chosenFiles.files) {
-        await uploadFileToAzure(file, httpMessages);
-      }
-
-      //print("================RESPONSES================\n");
-      //for (var response in httpMessages) {
-        //print(response);
-      //}s
-
-    } catch (exception) {
-      //print(exception);
-    }
-  }
-
-  Future<bool> uploadFileToAzure(PlatformFile file, List<String> httpMessages) async {
-    final fileName = file.name;
-    final fileBytes = file.bytes;
-    
-    try {
-      if (fileBytes == null) {
-        throw Exception("File bytes are null");
-      }
-
-      const url = "";
-
-      final response = await http.put(Uri.parse(url),
-        headers: {
-          'x-ms-blob-type': 'BlockBlob',
-          'Content-Type': file.extension ?? 'application/octet-stream',
-        },
-        body: fileBytes,
+      await _storage.upsertTableRow(
+        tableName: bookTableName, rowKey: rowKey, partitionKey: partitionKey, bodyMap: rowMap
       );
 
-      httpMessages.add("$fileName : ${response.statusCode}");
+      return true;
 
-      return response.statusCode == 200;
-      
     } catch (exception) {
-      httpMessages.add("$fileName : $exception");
+      logError("Error in addBook $exception");
       return false;
     }
   }
 
-  Future<bool> addNewBook(String isbn, String year, String category) async {
 
-      // final response = http.put(Uri.parse(""),
-      //   headers: {},
-      //   body: jsonEncode({}),
-      // );
-      
-    await Future.delayed(const Duration(seconds: 1));
+  Future<bool> removeBook(String isbn, String year, String category) async {
+    try {
+      var partitionKey = "1";
+      var rowKey = "";
 
-    return false;
+      Map<String, dynamic> rowMap = {
+        "PartitionKey": partitionKey, "RowKey": rowKey
+      };
+
+      await _storage.deleteTableRow(
+        tableName: bookTableName, rowKey: rowKey, partitionKey: partitionKey, 
+      );
+
+      return true;
+
+    } catch (exception) {
+      logError("Error in removeBook $exception");
+      return false;
+    }
+  }
+
+
+  Future<bool> updateBook(String isbn, String year, String category) async {
+    try {
+      var partitionKey = "";
+      var rowKey = "";
+
+      Map<String, dynamic> rowMap = {
+        "PartitionKey": partitionKey, "RowKey": rowKey
+      };
+
+      await _storage.upsertTableRow(
+        tableName: bookTableName, rowKey: rowKey, partitionKey: partitionKey, bodyMap: rowMap
+      );
+
+      return true;
+
+    } catch (exception) {
+      logError("Error in updateBook $exception");
+      return false;
+    }
   }
 }

@@ -99,7 +99,7 @@ class _BardenAddBookState extends State<BardenAddBook> {
                       _isLoading = true;
                     });
 
-                    _azure.addNewBook(_isbnController.text, _yearController.text, _dropdownValue);
+                    _azure.addBook(_isbnController.text, _yearController.text, _dropdownValue);
 
                     setState(() {
                       _isLoading = false;

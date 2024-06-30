@@ -13,5 +13,5 @@ var defaultBoxShadow = BoxShadow(
   offset: const Offset(3, 0),
 );
 
-List<String> readingCategories = ["Reading Challenge", "Class Novel", "Topic Book", "Library Book"];
-List<String> readingYears = ["EYFS", "1", "2", "3", "4", "5", "6"];
+List<String> readingCategories = ["All", "Reading Challenge", "Class Novel", "Topic Book", "Library Book"];
+List<String> readingYears = ["All", "EYFS", "1", "2", "3", "4", "5", "6"];

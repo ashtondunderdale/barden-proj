@@ -20,64 +20,71 @@ class BardenInventory extends StatefulWidget {
 
 class _BardenInventoryState extends State<BardenInventory> {
   bool isHovering = false;
+  final _searchController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          InventoryTitleBar(
-          onSearch: () => setState(() {}),
-          books: widget.books,
-          activeAction: "Inventory", 
-          onReadingCategorySelected: (selectedCategory) {
+  Widget build(BuildContext context) => SingleChildScrollView(
+    scrollDirection: Axis.vertical,
+    child: Column(
+      children: [
+        InventoryTitleBar(
+        onSearch: () => setState(() {}),
+        searchController: _searchController,
+        books: widget.books,
+        activeAction: "Inventory", 
+        onReadingCategorySelected: (selectedCategory) {
+          setState(() {
             selectedCategoryTag = selectedCategory;
+            _searchController.clear();
+            
             _updateBookVisibility();
-            setState(() {});
-          },
-          onReadingYearSelected: (selectedYear) {
+          });
+        },
+        onReadingYearSelected: (selectedYear) {
+          setState(() {
+            selectedYearTag = selectedYear;
+            _searchController.clear();
+
+            _updateBookVisibility();
+          });
+        },
+        onFiltersCleared: () 
+        {  
+          for (var book in widget.books) {
             setState(() {
-              selectedYearTag = selectedYear;
-              _updateBookVisibility();
+              book.isVisible = true;
+              selectedCategoryTag = "All";
+              selectedYearTag = "All";
             });
-          },
-          onFiltersCleared: () 
-          {  
-            for (var book in widget.books) {
-              setState(() {
-                book.isVisible = true;
-                selectedCategoryTag = "none";
-                selectedYearTag = "none";
-              });
-            }
-          }),
-          if (selectedCategoryTag != "none" && selectedYearTag == "none")
-            _buildBookList(
-              widget.books.where((book) => book.category == selectedCategoryTag).toList(),
-              selectedCategoryTag, false,
-            )
-          else
-            ...{
-              "EYFS": "EYFS",
-              "1": "Year 1", "2": "Year 2", "3": "Year 3",
-              "4": "Year 4", "5": "Year 5", "6": "Year 6",
-            }.entries.map((entry) => _buildBookList(
-              widget.books.where((book) => book.readingYear == entry.key).toList(),
-              entry.value, selectedYearTag != entry.key && selectedYearTag != "none",
-            )),
-        ],
-      ),
-    );
-  }
+          }
+        }),
+        if (_searchController.text.isNotEmpty)
+          _buildSearchBookList(widget.books.where((e) => e.isVisible).toList())
+        else if (selectedCategoryTag != "All" && selectedYearTag == "All")
+          _buildBookList(
+            widget.books.where((book) => book.category == selectedCategoryTag).toList(),
+            selectedCategoryTag, false,
+          )
+        else
+          ...{
+            "EYFS": "EYFS",
+            "1": "Year 1", "2": "Year 2", "3": "Year 3",
+            "4": "Year 4", "5": "Year 5", "6": "Year 6",
+          }.entries.map((entry) => _buildBookList(
+            widget.books.where((book) => book.readingYear == entry.key).toList(),
+            entry.value, selectedYearTag != entry.key && selectedYearTag != "All",
+          )),
+      ],
+    ),
+  );
 
   void _updateBookVisibility() {
     for (var book in widget.books) {
       bool isVisible = true;
-      if (selectedCategoryTag != "none" && book.category != selectedCategoryTag) {
+      if (selectedCategoryTag != "All" && book.category != selectedCategoryTag) {
         isVisible = false;
       }
-      if (selectedYearTag != "none" && book.readingYear != selectedYearTag) {
+      if (selectedYearTag != "All" && book.readingYear != selectedYearTag) {
         isVisible = false;
       }
       book.isVisible = isVisible;
@@ -92,9 +99,9 @@ class _BardenInventoryState extends State<BardenInventory> {
         Padding(
           padding: const EdgeInsets.only(left: 48),
           child: Text(
-            selectedYearTag != "none" && selectedCategoryTag != "none" ? selectedYearTag == "EYFS" ? "$selectedCategoryTag $selectedYearTag" : "$selectedCategoryTag Year $selectedYearTag"
-              : selectedYearTag == "none" && selectedCategoryTag != "none" ? selectedCategoryTag
-              : selectedCategoryTag == "none" && selectedYearTag != "none" ? selectedYearTag == "EYFS" ? "EYFS" : "Year $selectedYearTag"
+            selectedYearTag != "All" && selectedCategoryTag != "All" ? selectedYearTag == "EYFS" ? "$selectedCategoryTag $selectedYearTag" : "$selectedCategoryTag Year $selectedYearTag"
+              : selectedYearTag == "All" && selectedCategoryTag != "All" ? selectedCategoryTag
+              : selectedCategoryTag == "All" && selectedYearTag != "All" ? selectedYearTag == "EYFS" ? "EYFS" : "Year $selectedYearTag"
               : title,
             style: primaryFont.copyWith(
               color: Colors.grey,
@@ -123,6 +130,41 @@ class _BardenInventoryState extends State<BardenInventory> {
       ],
     ),
   ) : const SizedBox();
+
+  Widget _buildSearchBookList(List<Book> books) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: MediaQuery.sizeOf(context).height - 220,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 7, 
+                  childAspectRatio: 0.75, 
+                ),
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: books.length,
+                itemBuilder: (context, index) => books[index].isVisible
+                    ? BookItem(
+                        book: books[index],
+                        onBookTap: () {
+                          _showBookDetails(context, books[index]);
+                        },
+                      )
+                    : const SizedBox(),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 
   void _showBookDetails(BuildContext context, Book book) async => showDialog<void>(
     context: context,
