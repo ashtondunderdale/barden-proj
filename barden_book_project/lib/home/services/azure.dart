@@ -1,7 +1,7 @@
-import 'package:flet/flet.dart';
+import 'dart:convert';
 
 import 'package:azstore/azstore.dart';
-
+import 'package:http/http.dart' as http;
 import '../../_key.dart';
 import '../../login/models/login.dart';
 import '../models/book.dart';
@@ -16,18 +16,19 @@ class AzureService {
 
   Future<bool> loginWithUsernameAndPassword(AuthModel auth) async {
     try {
+      return true;
       var users = await _storage.filterTableRows(tableName: bookTableName, filter: "", top: 300);
 
-      for (var user in users) {
-        var username = user["username"];
-        var password = user["password"];
+      // for (var user in users) {
+      //   var username = user["username"];
+      //   var password = user["password"];
 
-        return true; // remove this
+      //   return true; // remove this
 
-        if (username == auth.username && password == auth.password) {
-          return true;
-        }
-      }
+      //   if (username == auth.username && password == auth.password) {
+      //     return true;
+      //   }
+      // }
 
       return false;
 
@@ -86,8 +87,20 @@ class AzureService {
   Future<bool> addBook(String isbn, String year, String category, int copies) async {
     try {
 
+      print(isbn);
+      print(category);
+      print(year);
+      print(copies);
 
-      return true;
+      var body = jsonEncode({"ISBN":isbn, "Category":category, "Year":year, "Copies": copies});
+
+      var response = await http.post(
+        Uri.parse("https://barden-book-inventory.azurewebsites.net/api/HttpTrigger1"), 
+        headers: {},
+        body: body
+      );
+
+      return response.statusCode == 200;
 
     } catch (exception) {
       logError("Error in addBook $exception");

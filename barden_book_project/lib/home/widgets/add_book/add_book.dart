@@ -2,7 +2,6 @@ import 'package:barden_book_project/common/barden_close_icon.dart';
 import 'package:barden_book_project/common/barden_dropdown.dart';
 import 'package:barden_book_project/home/services/azure.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 import '../../../common/barden_button.dart';
 import '../../../common/barden_field.dart';
@@ -102,7 +101,11 @@ class _BardenAddBookState extends State<BardenAddBook> {
                       _isLoading = true;
                     });
 
-                    await _azure.addBook(_isbnController.text, _selectedReadingCategory, _selectedReadingYear, 0);
+                    var copies = int.parse(_copiesController.text);
+                    var isSuccess = await _azure.addBook(_isbnController.text, _selectedReadingYear, _selectedReadingCategory, copies);
+
+                    Navigator.pop(context);
+                    _showResponseWindow(context, isSuccess);
 
                     setState(() {
                       _isLoading = false;
@@ -117,5 +120,53 @@ class _BardenAddBookState extends State<BardenAddBook> {
         ),
       ),
     ),
+  );
+
+  void _showResponseWindow(BuildContext context, bool isSuccess) async => showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) => Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: Container(
+              width: 320,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8)
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: BardenIconButton(icon: Icon(
+                      Icons.close,
+                      color: bardenPurple,
+                      size: 20,
+                    ), 
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                  ),
+                  Center(
+                    child: Text(
+                      isSuccess ? "Book added successfully" : "Failed to add book",
+                      style: primaryFont.copyWith(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   );
 }
