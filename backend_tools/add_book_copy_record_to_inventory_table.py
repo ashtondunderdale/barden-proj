@@ -1,5 +1,6 @@
 from azure.data.tables import TableServiceClient
 from azure.core.credentials import AzureNamedKeyCredential
+from flet import Flet
 
 from get_book_data_from_isbn import get_book_meta_data_from_isbn
 
@@ -10,6 +11,12 @@ from secret_keys import account_name, key, endpoint
 ACCOUNT_NAME = account_name
 KEY = key
 ENDPOINT = endpoint
+
+
+@Flet.register_function
+def my_python_function(param):
+    print(f'Received from Flutter: {param}')
+    # Add your Python logic here
 
 
 def authenticate_with_table_service(account_name, key, endpoint):
@@ -67,7 +74,9 @@ def add_record_to_table(record, table):
     table.create_entity(record)
 
 
-def add_book_copy(books_table, isbn, category, reading_year, n_copies):
+def add_book_copy(isbn, category, reading_year, n_copies):
+
+    books_table = authenticate_with_table_service(ACCOUNT_NAME, KEY, ENDPOINT)
 
     # check if a book copy of this already exists - if the categories
     # also match then simply increment n_copies
@@ -79,5 +88,4 @@ def add_book_copy(books_table, isbn, category, reading_year, n_copies):
 
 
 # test
-books_table = authenticate_with_table_service(ACCOUNT_NAME, KEY, ENDPOINT)
-add_book_copy(books_table, '9780008293338', 'TESTING', 'EYFS', 3)
+add_book_copy('9780008293338', 'TESTING', 'EYFS', 3)
