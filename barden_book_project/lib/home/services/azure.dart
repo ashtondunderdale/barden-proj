@@ -1,13 +1,19 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:azstore/azstore.dart';
+import 'package:http/http.dart' as http;
 
 import '../../_key.dart';
 import '../../login/models/login.dart';
 import '../models/book.dart';
 
 class AzureService {
+
+  var storage = AzureStorage.parse(connStr);
   
+  static const String bookTableName = "bookinventory";
+
+
   Future<bool> loginWithUsernameAndPassword(AuthModel auth) async {
     
     return true;
@@ -15,8 +21,8 @@ class AzureService {
 
   Future<List<Book>?> getBooks() async {
     try {
-      var storage = AzureStorage.parse(connStr);
-      var result = await storage.filterTableRows(tableName: 'bookinventory', filter: "", top: 300);
+
+      var result = await storage.filterTableRows(tableName: bookTableName, filter: "", top: 300);
 
       List<Book> books = [];
 
@@ -47,65 +53,36 @@ class AzureService {
     }
   }
 
-  void getFiles() async {
-    try {
-      var chosenFiles = await FilePicker.platform.pickFiles(allowMultiple: true);    
+  Future<bool> addBook(String isbn, String year, String category) async {
 
-      if (chosenFiles == null || chosenFiles.files.isEmpty) {
-        return;
-      }
-
-      List<String> httpMessages = [];
-
-      for (var file in chosenFiles.files) {
-        await uploadFileToAzure(file, httpMessages);
-      }
-
-      //print("================RESPONSES================\n");
-      //for (var response in httpMessages) {
-        //print(response);
-      //}s
-
-    } catch (exception) {
-      //print(exception);
-    }
-  }
-
-  Future<bool> uploadFileToAzure(PlatformFile file, List<String> httpMessages) async {
-    final fileName = file.name;
-    final fileBytes = file.bytes;
-    
-    try {
-      if (fileBytes == null) {
-        throw Exception("File bytes are null");
-      }
-
-      const url = "";
-
-      final response = await http.put(Uri.parse(url),
-        headers: {
-          'x-ms-blob-type': 'BlockBlob',
-          'Content-Type': file.extension ?? 'application/octet-stream',
-        },
-        body: fileBytes,
+      final response = http.put(Uri.parse(""),
+        headers: {},
+        body: jsonEncode({}),
       );
-
-      httpMessages.add("$fileName : ${response.statusCode}");
-
-      return response.statusCode == 200;
       
-    } catch (exception) {
-      httpMessages.add("$fileName : $exception");
-      return false;
-    }
+    await Future.delayed(const Duration(seconds: 1));
+
+    return false;
   }
 
-  Future<bool> addNewBook(String isbn, String year, String category) async {
+  Future<bool> removeBook(String isbn, String year, String category) async {
 
-      // final response = http.put(Uri.parse(""),
-      //   headers: {},
-      //   body: jsonEncode({}),
-      // );
+      final response = http.put(Uri.parse(""),
+        headers: {},
+        body: jsonEncode({}),
+      );
+      
+    await Future.delayed(const Duration(seconds: 1));
+
+    return false;
+  }
+
+  Future<bool> updateBook(String isbn, String year, String category) async {
+
+      final response = http.put(Uri.parse(""),
+        headers: {},
+        body: jsonEncode({}),
+      );
       
     await Future.delayed(const Duration(seconds: 1));
 

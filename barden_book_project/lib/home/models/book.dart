@@ -1,9 +1,8 @@
-class Book {
+ class Book {
   String title;
   String author;
   String isbn;
   String coverUrl;
-  
   String category;
   String lexileLevel;
   String publisher;
@@ -11,7 +10,6 @@ class Book {
   String releaseYear;
   String language;
   double blScore;
-  
   int numberOfCopies;
 
   bool isVisible; 

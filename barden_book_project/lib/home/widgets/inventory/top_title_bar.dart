@@ -8,13 +8,14 @@ import '../../../constants.dart';
 import '../../../login/views/login.dart';
 import '../../models/book.dart';
 
-class InventoryTitleBar extends StatelessWidget {
-  InventoryTitleBar({
+class InventoryTitleBar extends StatefulWidget {
+  const InventoryTitleBar({
     super.key,
     required this.activeAction, 
     required this.onReadingCategorySelected, 
     required this.onReadingYearSelected, 
     required this.onFiltersCleared,
+    required this.searchController,
     required this.books,
     required this.onSearch
   });
@@ -25,8 +26,14 @@ class InventoryTitleBar extends StatelessWidget {
   final VoidCallback onSearch;
 
   final VoidCallback onFiltersCleared;
-  final _searchController = TextEditingController();
+  final TextEditingController searchController;
   final List<Book> books;
+
+  @override
+  State<InventoryTitleBar> createState() => _InventoryTitleBarState();
+}
+
+class _InventoryTitleBarState extends State<InventoryTitleBar> {
 
   @override
   Widget build(BuildContext context) => Row(
@@ -40,7 +47,7 @@ class InventoryTitleBar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 32),
                 child: Text(
-                  activeAction,
+                  widget.activeAction,
                   style: primaryFont.copyWith(
                     color: const Color.fromARGB(255, 58, 58, 58),
                     fontSize: 32,
@@ -49,10 +56,10 @@ class InventoryTitleBar extends StatelessWidget {
                 ),
               ),
               BardenDropdown(items: readingCategories, onItemSelected: (item) {
-                onReadingCategorySelected(item);
+                widget.onReadingCategorySelected(item);
               }), 
               BardenDropdown(items: readingYears, onItemSelected: (item) {
-                onReadingYearSelected(item);
+                widget.onReadingYearSelected(item);
               }), 
               Tooltip(
                 message: "Clear Filters",
@@ -63,12 +70,16 @@ class InventoryTitleBar extends StatelessWidget {
                     size: 20,
                   ),
                   onPressed: () {
-                    onFiltersCleared();
+                    widget.onFiltersCleared();
+                    
+                    setState(() {
+                      widget.searchController.clear();
+                    });
                   },
                 ),
               ),
-              BookSearchBar(controller: _searchController, books: books, onSearch:(text) {
-                onSearch();
+              BookSearchBar(controller: widget.searchController, books: widget.books, onSearch:(text) {
+                widget.onSearch();
               }),
             ],
           ),
