@@ -1,5 +1,6 @@
 import 'package:barden_book_project/common/barden_close_icon.dart';
 import 'package:barden_book_project/common/barden_dropdown.dart';
+import 'package:barden_book_project/data.dart';
 import 'package:barden_book_project/home/widgets/inventory/book_search_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -55,10 +56,10 @@ class _InventoryTitleBarState extends State<InventoryTitleBar> {
                   ),
                 ),
               ),
-              BardenDropdown(items: readingCategories, onItemSelected: (item) {
+              BardenDropdown(items: readingCategories, value: selectedCategoryTag, onItemSelected: (item) {
                 widget.onReadingCategorySelected(item);
               }), 
-              BardenDropdown(items: readingYears, onItemSelected: (item) {
+              BardenDropdown(items: readingYears, value: selectedYearTag, onItemSelected: (item) {
                 widget.onReadingYearSelected(item);
               }), 
               Tooltip(

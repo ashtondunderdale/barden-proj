@@ -6,10 +6,12 @@ class BardenDropdown extends StatefulWidget {
     super.key,
     required this.items,
     required this.onItemSelected,
+    required this.value,
   });
 
   final List<String> items;
   final Function(String) onItemSelected;
+  final String value;
 
   @override
   State<BardenDropdown> createState() => _BardenDropdownState();
@@ -37,7 +39,7 @@ class _BardenDropdownState extends State<BardenDropdown> {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: _selectedItem,
+          value: widget.value,
           items: widget.items.map<DropdownMenuItem<String>>((String item) => DropdownMenuItem<String>(
             value: item,
             child: Text(item, style: primaryFont.copyWith(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold)),

@@ -1,4 +1,5 @@
 import 'package:barden_book_project/constants.dart';
+import 'package:barden_book_project/data.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/book.dart';
@@ -43,10 +44,12 @@ class BookSearchBar extends StatelessWidget {
             ),
             
             onChanged: (text) {
-        
+              selectedCategoryTag = "All";
+              selectedYearTag = "All";
+
               for (var book in books) {
-                var title = book.title.toLowerCase().replaceAll(RegExp(r'[^\w\s]+'),'');
-                var author = book.author.toLowerCase().replaceAll(RegExp(r'[^\w\s]+'),'');
+                var title = filterField(book.title);
+                var author = filterField(book.author);
       
                 book.isVisible = title.contains(text) || author.contains(text);
               }
@@ -58,4 +61,7 @@ class BookSearchBar extends StatelessWidget {
       ),
     ],
   );
+
+  String filterField(String field) 
+    => field.toLowerCase().replaceAll(RegExp(r'[^\w\s]+'),'');
 }

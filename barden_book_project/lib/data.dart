@@ -1,2 +1,2 @@
-String selectedYearTag = "none";
-String selectedCategoryTag = "none";
+String selectedYearTag = "All";
+String selectedCategoryTag = "All";

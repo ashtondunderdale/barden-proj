@@ -48,14 +48,14 @@ class _BardenInventoryState extends State<BardenInventory> {
           for (var book in widget.books) {
             setState(() {
               book.isVisible = true;
-              selectedCategoryTag = "none";
-              selectedYearTag = "none";
+              selectedCategoryTag = "All";
+              selectedYearTag = "All";
             });
           }
         }),
         if (_searchController.text.isNotEmpty)
           _buildSearchBookList(widget.books.where((e) => e.isVisible).toList())
-        else if (selectedCategoryTag != "none" && selectedYearTag == "none")
+        else if (selectedCategoryTag != "All" && selectedYearTag == "All")
           _buildBookList(
             widget.books.where((book) => book.category == selectedCategoryTag).toList(),
             selectedCategoryTag, false,
@@ -67,7 +67,7 @@ class _BardenInventoryState extends State<BardenInventory> {
             "4": "Year 4", "5": "Year 5", "6": "Year 6",
           }.entries.map((entry) => _buildBookList(
             widget.books.where((book) => book.readingYear == entry.key).toList(),
-            entry.value, selectedYearTag != entry.key && selectedYearTag != "none",
+            entry.value, selectedYearTag != entry.key && selectedYearTag != "All",
           )),
       ],
     ),
@@ -76,10 +76,10 @@ class _BardenInventoryState extends State<BardenInventory> {
   void _updateBookVisibility() {
     for (var book in widget.books) {
       bool isVisible = true;
-      if (selectedCategoryTag != "none" && book.category != selectedCategoryTag) {
+      if (selectedCategoryTag != "All" && book.category != selectedCategoryTag) {
         isVisible = false;
       }
-      if (selectedYearTag != "none" && book.readingYear != selectedYearTag) {
+      if (selectedYearTag != "All" && book.readingYear != selectedYearTag) {
         isVisible = false;
       }
       book.isVisible = isVisible;
@@ -94,9 +94,9 @@ class _BardenInventoryState extends State<BardenInventory> {
         Padding(
           padding: const EdgeInsets.only(left: 48),
           child: Text(
-            selectedYearTag != "none" && selectedCategoryTag != "none" ? selectedYearTag == "EYFS" ? "$selectedCategoryTag $selectedYearTag" : "$selectedCategoryTag Year $selectedYearTag"
-              : selectedYearTag == "none" && selectedCategoryTag != "none" ? selectedCategoryTag
-              : selectedCategoryTag == "none" && selectedYearTag != "none" ? selectedYearTag == "EYFS" ? "EYFS" : "Year $selectedYearTag"
+            selectedYearTag != "All" && selectedCategoryTag != "All" ? selectedYearTag == "EYFS" ? "$selectedCategoryTag $selectedYearTag" : "$selectedCategoryTag Year $selectedYearTag"
+              : selectedYearTag == "All" && selectedCategoryTag != "All" ? selectedCategoryTag
+              : selectedCategoryTag == "All" && selectedYearTag != "All" ? selectedYearTag == "EYFS" ? "EYFS" : "Year $selectedYearTag"
               : title,
             style: primaryFont.copyWith(
               color: Colors.grey,

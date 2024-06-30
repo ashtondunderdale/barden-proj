@@ -37,9 +37,10 @@ class _HomeState extends State<Home> {
 
   void initializeBooks() async {
     books = await _azure.getBooks() ?? [];
+
     setState(() {
       _isLoading = false;
-      activeActionBarWidget = BardenInventory(books: books);    
+      activeActionBarWidget = BardenInventory(books: books); 
     });
   }
 
